@@ -2,25 +2,34 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class BlogService {
-  private posts: Post[]; //memory cache of all blog posts
+  private posts: Post[]= []; //memory cache of all blog posts
   private currentId: number = 0 //
 
   constructor() {
+    let dummyPost = this.newPost();
     this.fetchPosts();
+    console.log(this.getPost(dummyPost.postid));
+    dummyPost.title="updated title";
+    this.updatePost(dummyPost);
+    console.log(this.getPost(dummyPost.postid));
+    this.deletePost(dummyPost.postid);
+    console.log(this.getPost(dummyPost.postid));
+    
   }
 
   fetchPosts(): void {
-    /* NOT DONE:
+    /* DONE:
       This method "populates" the posts property by retrieving 
       all all blog posts from localStorage. This function must be 
       called inside the constructor so that all posts are retrieved 
       and be ready in memory when BlogService is created. 
     */
-    for(var item in localStorage){
-      console.log("localStorage[item]", localStorage[item]);
-      // let currentPost = JSON.parse(localStorage[item]);
-      // console.log("current Post", currentPost);
-      // this.posts.push(currentPost);
+    console.log("localStorage length: ", localStorage.length);
+    for(var i =0; i < localStorage.length; i++){
+      console.log(localStorage.getItem(localStorage.key(i)));
+      let currentPost = JSON.parse(localStorage.getItem(localStorage.key(i)));
+      console.log("Current Post: ", currentPost);
+      this.posts.push(currentPost);
     }
   }
 
@@ -32,7 +41,9 @@ export class BlogService {
   getPost(id: number): Post{
     /* DONE: Find the post with postid=id from posts and return it */
     let retrievedPost: Post = JSON.parse(localStorage.getItem(id.toString()));
-   
+    console.log("Got Post ID: ", retrievedPost.postid);
+
+    // returns null if post is not found
     return retrievedPost; 
   }
 
@@ -63,6 +74,7 @@ export class BlogService {
     // update id
     this.currentId += 1; 
 
+    console.log("Just created new post: ", newPost, " current id is now:  ", this.currentId);
     return newPost; 
   }
 
@@ -98,6 +110,7 @@ export class BlogService {
       // delete post from localStorage
       localStorage.removeItem(retrievedPost.postid.toString());
     }
+    console.log("Deleted Post: ", retrievedPost.postid);
   }
 
 }
