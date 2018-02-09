@@ -1,0 +1,22 @@
+<p>Edit Component</p>
+<label>Whoo</label>
+<!-- <input 
+  type="text" 
+  class="form-control" 
+  (input)="onUpdateName($event)"
+> -->
+
+<!-- Two Way Data Binding -->
+<input 
+  type="text" 
+  class="form-control" 
+  [(ngModel)]="editName"
+>
+
+
+<button (click)="onCreateEdit()">Add Edit</button>
+<p *ngIf="editCreated; else noEdit">Edit was created, edit name is {{ editName }} </p>
+<ng-template #noEdit>
+  <p>No edit was created! </p> 
+</ng-template>
+
