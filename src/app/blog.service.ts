@@ -10,15 +10,17 @@ export class BlogService {
   }
 
   fetchPosts(): void {
-    /* DONE:
+    /* NOT DONE:
       This method "populates" the posts property by retrieving 
       all all blog posts from localStorage. This function must be 
       called inside the constructor so that all posts are retrieved 
       and be ready in memory when BlogService is created. 
     */
-    for(var item in window.localStorage){
-      let currentPost = JSON.parse(localStorage.getItem(item));
-      this.posts.push(currentPost);
+    for(var item in localStorage){
+      console.log("localStorage[item]", localStorage[item]);
+      // let currentPost = JSON.parse(localStorage[item]);
+      // console.log("current Post", currentPost);
+      // this.posts.push(currentPost);
     }
   }
 
@@ -90,7 +92,7 @@ export class BlogService {
     exists, do nothing.
     */
 
-    let retrievedPost = JSON.parse(localStorage.getItem(post.postid.toString()));
+    let retrievedPost = JSON.parse(localStorage.getItem(postid.toString()));
     
     if(retrievedPost){
       // delete post from localStorage
