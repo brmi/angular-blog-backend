@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Post, BlogService } from '../blog.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-edit',
@@ -10,32 +11,22 @@ import { Post, BlogService } from '../blog.service';
 
 export class EditComponent implements OnInit {
 
-  editId = 10;
-  editStatus = 'offline';
-  editCreationStatus = "No Edit was created";
-  editName = '';
-  editCreated = false;
-  editList = ['edit1', 'edit2', 'edit3'];
-
-  getEditId() {
-    return this.editId;
-  }
-
-  constructor(private blogService: BlogService) {
+  post: Post; 
+  
+  constructor(private blogService: BlogService, private route: ActivatedRoute) {
     
-   }
+  }
 
   ngOnInit() {
+    // when component is initialized
+    let currentPostid: number = this.route.snapshot.params['id'];
+    console.log(currentPostid);
+    this.post = this.blogService.getPost(currentPostid);
   }
 
-  onCreateEdit() {
-    this.editCreated = true;
-    this.editCreationStatus = this.editName;
-    this.editList.push(this.editName);
+  onSave() {
+    console.log("clicked onSave function");
   }
 
-  onUpdateName(event: any) {
-    this.editName = event.target.value;
-  }
 
 }

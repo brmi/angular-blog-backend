@@ -1,22 +1,35 @@
 <p>Edit Component</p>
-<label>Whoo</label>
-<!-- <input 
-  type="text" 
-  class="form-control" 
-  (input)="onUpdateName($event)"
-> -->
 
-<!-- Two Way Data Binding -->
+<p>Fetched Post ID: {{ post.postid }}</p>
+<p>Fetched Title: {{ post.title }}</p>
+<p>Fetched Body: {{ post.body }}</p>
+
+<label>Title: </label>
 <input 
   type="text" 
   class="form-control" 
-  [(ngModel)]="editName"
+  [(ngModel)]="editTitle"
 >
+<br/>
+<br/>
+
+<label>Body: </label>
+<textarea
+  type="text" 
+  class="form-control" 
+  [(ngModel)]="editBody"> 
+
+</textarea>
+
+<p>Title value: {{ editTitle }}</p>
+<p>Body value: {{ editBody }}</p>
 
 
-<button (click)="onCreateEdit()">Add Edit</button>
-<p *ngIf="editCreated; else noEdit">Edit was created, edit name is {{ editName }} </p>
-<ng-template #noEdit>
-  <p>No edit was created! </p> 
-</ng-template>
+<button (click)="onSave()">Save</button>
+<p *ngIf="savedPost">Post was saved.</p>
+
+<button (click)="onPreview()">Preview</button>
+
+<button (click)="onDelete()">Delete</button>
+
 
