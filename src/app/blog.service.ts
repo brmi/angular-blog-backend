@@ -13,7 +13,7 @@ export class BlogService {
     this.updatePost(dummyPost);
     console.log(this.getPost(dummyPost.postid));
     this.deletePost(dummyPost.postid);
-    console.log(this.getPost(dummyPost.postid));
+    // console.log(this.getPost(dummyPost.postid));
     
   }
 
