@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { port } from '_debugger';
 
 @Injectable()
 export class BlogService {
@@ -9,11 +8,12 @@ export class BlogService {
   constructor() {
     this.fetchPosts();
     let dummyPost = this.newPost();
+    console.log("Get Posts: ", this.getPosts());
     dummyPost.title="updated title";
     this.updatePost(dummyPost);
-    console.log(this.getPost(dummyPost.postid));
+    console.log("Get Posts after update: ", this.getPosts());
     this.deletePost(dummyPost.postid);
-    // console.log(this.getPost(dummyPost.postid));
+    console.log("Get Posts after delete: ", this.getPosts());
     
   }
 
@@ -31,7 +31,7 @@ export class BlogService {
       this.posts.push(currentPost);
     }
 
-    console.log("this.posts after Fetch Post: ", this.posts);
+    // console.log("this.posts after Fetch Post: ", this.posts);
   }
 
   getPosts(): Post[] {
@@ -68,16 +68,17 @@ export class BlogService {
     newPost.body='default body';
 
     // save to localStorage
+    console.log("saving to local storage: ", newPost.postid.toString());
     localStorage.setItem(newPost.postid.toString(), JSON.stringify(newPost));
     
     // Add to posts
-    this.posts.push(newPost);
+    console.log("push post: ", this.posts.push(newPost));
     
     // update id
     this.currentId += 1; 
 
     console.log("Just created new post: ", newPost, " current id is now:  ", this.currentId);
-    console.log("Posts: ", this.posts);
+    // console.log("Posts: ", this.getPosts());
     return newPost; 
   }
 
@@ -112,11 +113,11 @@ export class BlogService {
     if(retrievedPost){
       // delete post from localStorage
       localStorage.removeItem(localStorage.postidToString);
+      console.log("deleted from post arr: ", this.posts.splice(this.currentId-1, 1));
     }
 
-    this.posts.splice(this.currentId-1, 1);
-    console.log("Deleted Post: ", retrievedPost.postid);
-    console.log("Posts after delete: ", this.getPosts());
+    
+    console.log("Deleted Pos: ", retrievedPost.postid);
   }
 
 }
