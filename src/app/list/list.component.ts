@@ -9,10 +9,18 @@ import { Post, BlogService } from '../blog.service';
   providers: [BlogService]
 })
 export class ListComponent implements OnInit {
-  listItem = ['list1', 'list2', 'list3'];
+  
+  listItems: Post[];
 
   constructor(private blogService: BlogService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.getPosts();
+  }
+
+  getPosts(): void {
+    this.blogService.getPosts()
+    .subscribe(listItems => this.listItems = listItems);
+  }
 
 }

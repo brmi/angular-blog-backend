@@ -10,7 +10,6 @@ import { ActivatedRoute } from '@angular/router';
 })
 
 export class EditComponent implements OnInit {
-
   post: Post; 
   
   constructor(private blogService: BlogService, private route: ActivatedRoute) {
@@ -19,14 +18,18 @@ export class EditComponent implements OnInit {
 
   ngOnInit() {
     // when component is initialized
-    let currentPostid: number = this.route.snapshot.params['id'];
-    console.log(currentPostid);
-    this.post = this.blogService.getPost(currentPostid);
+    this.getPost();
   }
 
   onSave() {
     console.log("clicked onSave function");
   }
 
+  getPost(): any {
+    const currentPostid = +this.route.snapshot.paramMap.get('id');
+    console.log(currentPostid);
+    this.blogService.getPost(currentPostid)
+      .subscribe(post => this.post = post);
+  }
 
 }
