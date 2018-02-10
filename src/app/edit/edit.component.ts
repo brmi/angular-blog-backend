@@ -32,6 +32,7 @@ export class EditComponent implements OnInit {
       (params: Params) => {
         this.post.postid = params['id'];
         this.currentPostid = params['id'];
+        this.post = this.blogService.getPost(params['id']);
       }
     );
   }

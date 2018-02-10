@@ -7,9 +7,9 @@
   <ul class="list">
     <li *ngFor="let post of posts | sort:'postid'">
       <span>{{post.created | date:'medium' }}</span>
-      <a routerLink="/edit/{{post.postid}}">
+      <button (click)="onClickPost(post.postid)">
         <span class="badge">{{post.postid}}</span> {{post.title}}
-      </a>
+      </button>
     </li>
   </ul>
 </div>
