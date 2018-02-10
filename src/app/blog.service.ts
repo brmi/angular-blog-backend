@@ -101,10 +101,9 @@ export class BlogService {
     */
 
     let retrievedPost = JSON.parse(localStorage.getItem(postid.toString()));
-    let postidToString = postid.toString();
     if(retrievedPost){
       // delete post from localStorage
-      localStorage.removeItem(localStorage.postidToString);
+      localStorage.removeItem(postid.toString());
       console.log("deleted from post arr: ", this.posts.splice(this.currentId-1, 1));
     }
 
