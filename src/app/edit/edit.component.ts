@@ -44,7 +44,7 @@ export class EditComponent implements OnInit {
     this.blogService.getPosts();
     this.router.navigate(['/edit', this.currentPostid]);
   }
-  
+
   onSave() {
     console.log("clicked onSave function. postid is ", this.currentPostid);
     this.blogService.updatePost(this.post);
@@ -53,6 +53,7 @@ export class EditComponent implements OnInit {
     this.savedPost = true;
     this.blogService.getPosts();
     this.router.navigate(['/edit', this.currentPostid]);
+    this.disableSave = true;
   }
 
   onDelete() {
