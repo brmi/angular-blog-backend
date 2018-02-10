@@ -1,10 +1,5 @@
 import { Injectable } from '@angular/core';
-<<<<<<< HEAD
 import { port } from '_debugger';
-=======
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
->>>>>>> 0b79c4c371289122514cb1ccfa338d7bf925f4d1
 
 @Injectable()
 export class BlogService {
@@ -39,19 +34,19 @@ export class BlogService {
     console.log("this.posts after Fetch Post: ", this.posts);
   }
 
-  getPosts(): Observable<Post[]> {
+  getPosts(): Post[] {
     /* DONE: This method simply returns posts */
     console.log(this.posts);
     return this.posts;
   }
 
-  getPost(id: number): Observable<Post>{
+  getPost(id: number): Post{
     /* DONE: Find the post with postid=id from posts and return it */
     let retrievedPost: Post = JSON.parse(localStorage.getItem(id.toString()));
     console.log("Got Post ID: ", retrievedPost.postid);
 
     // returns null if post is not found
-    return of(retrievedPost); 
+    return retrievedPost; 
   }
 
   newPost(): Post {
