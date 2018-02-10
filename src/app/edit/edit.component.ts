@@ -12,9 +12,7 @@ import { ListComponent } from '../list/list.component';
 
 export class EditComponent implements OnInit {
 
-  @Input() post: Post;
-
-  // post: Post; 
+  post: Post; 
   disableSave = true;
   savedPost = false;
   deletedPost = false;
