@@ -37,6 +37,14 @@ export class EditComponent implements OnInit {
     );
   }
 
+  tempSave() {
+    this.blogService.updatePost(this.post);
+    let tempPost: Post =  this.blogService.getPost(this.currentPostid);
+    this.savedPost = true;
+    this.blogService.getPosts();
+    this.router.navigate(['/edit', this.currentPostid]);
+  }
+  
   onSave() {
     console.log("clicked onSave function. postid is ", this.currentPostid);
     this.blogService.updatePost(this.post);
@@ -57,7 +65,7 @@ export class EditComponent implements OnInit {
 
   allowSave() {
     this.disableSave = false;
-    this.onSave();
+    this.tempSave();
   }
 
   onLoadPreview() {
