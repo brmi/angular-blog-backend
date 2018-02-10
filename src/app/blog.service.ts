@@ -109,7 +109,7 @@ export class BlogService {
     if(retrievedPost){
       // delete post from localStorage
       localStorage.removeItem(postid.toString());
-      console.log("deleted from post arr: ", this.posts.splice(this.currentId-1, 1));
+      // console.log("deleted from post arr: ", this.posts.splice(this.currentId-1, 1));
     }
 
     

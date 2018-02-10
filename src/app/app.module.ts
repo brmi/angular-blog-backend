@@ -9,6 +9,7 @@ import { EditComponent } from './edit/edit.component';
 import { ListComponent } from './list/list.component';
 import { PreviewComponent } from './preview/preview.component';
 
+import { ArraySortPipe } from './array.sort.pipe';
 const appRoutes: Routes = [
   { path: '', component: ListComponent },
   { path: 'edit/:id', component: EditComponent },
@@ -20,7 +21,8 @@ const appRoutes: Routes = [
     AppComponent,
     EditComponent,
     ListComponent,
-    PreviewComponent
+    PreviewComponent,
+    ArraySortPipe
   ],
   imports: [
     BrowserModule,
