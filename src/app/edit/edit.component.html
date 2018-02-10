@@ -9,6 +9,7 @@
   type="text" 
   class="form-control" 
   [(ngModel)]="editTitle"
+  value="{{post.title}}"
 >
 <br/>
 <br/>
@@ -17,13 +18,10 @@
 <textarea
   type="text" 
   class="form-control" 
-  [(ngModel)]="editBody"> 
+  [(ngModel)]="editBody"
+  value="{{post.body}}"> 
 
 </textarea>
-
-<p>Title value: {{ editTitle }}</p>
-<p>Body value: {{ editBody }}</p>
-
 
 <button (click)="onSave()">Save</button>
 <p *ngIf="savedPost">Post was saved.</p>
