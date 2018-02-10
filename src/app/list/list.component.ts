@@ -6,7 +6,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
   selector: 'app-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.css'],
-  providers: [BlogService]
+  // providers: [BlogService]
 })
 export class ListComponent implements OnInit {
   @Input() post: Post;
@@ -14,18 +14,22 @@ export class ListComponent implements OnInit {
   posts: Post[];
   new_post: Post;
 
-  constructor(private blogService: BlogService, private router: Router,
-              private route: ActivatedRoute) {
+  constructor(private blogService: BlogService, private router: Router, 
+    private route: ActivatedRoute) {
 
   }
 
   ngOnInit() {
-    this.getPosts();
+    this.posts = this.blogService.getPosts();
   }
 
-  getPosts(): void {
-    this.posts =  this.blogService.getPosts();
-  }
+  // updateTitle(): void {
+  //   this.posts[this.post.postid-1].title = this.post.title;
+  // }
+
+  // getPosts(): void {
+  //   this.posts =  this.blogService.getPosts();
+  // }
 
   newPost() {
     this.new_post = this.blogService.newPost();

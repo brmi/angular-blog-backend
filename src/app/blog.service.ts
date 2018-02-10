@@ -95,6 +95,11 @@ export class BlogService {
     // update post in localStorage
     localStorage.setItem(retrievedPost.postid.toString(), JSON.stringify(retrievedPost));
 
+    // update post in local array
+    let localPost = this.posts.find(x => x.postid === post.postid);
+    localPost.title = post.title;
+    localPost.body = post.body;
+    localPost.modified = post.modified;
   }
 
   deletePost(postid: number): void {

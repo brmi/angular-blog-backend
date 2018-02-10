@@ -7,7 +7,7 @@ import { ListComponent } from '../list/list.component';
   selector: 'app-edit',
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.css'],
-  providers: [BlogService]
+  // providers: [BlogService]
 })
 
 export class EditComponent implements OnInit {
@@ -41,8 +41,8 @@ export class EditComponent implements OnInit {
     this.blogService.updatePost(this.post);
     let tempPost: Post =  this.blogService.getPost(this.currentPostid);
     this.savedPost = true;
-    this.blogService.getPosts();
-    this.router.navigate(['/edit', this.currentPostid]);
+    console.log("temp save: ", this.blogService.getPosts());
+    // this.router.navigate(['/edit', this.currentPostid]);
   }
 
   onSave() {
@@ -52,7 +52,7 @@ export class EditComponent implements OnInit {
     this.post.modified = tempPost.modified;
     this.savedPost = true;
     this.blogService.getPosts();
-    this.router.navigate(['/edit', this.currentPostid]);
+    // this.router.navigate(['/edit', this.currentPostid]);
     this.disableSave = true;
   }
 
