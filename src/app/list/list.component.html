@@ -1,2 +1,18 @@
-<p>list component</p>
-<!-- <app-edit *ngFor="let edit of listItem"></app-edit> -->
+<p>hello</p>
+<ul class="list">
+    <li *ngFor="let listItem of listItems">
+      <a routerLink="/edit/{{listItem.postid}}">
+        <span class="badge">{{listItem.postid}}</span> {{listItem.title}}
+      </a>
+    </li>
+  </ul>
+
+
+
+  <!-- export class Post {
+    postid: number;
+    created: Date;
+    modified: Date;
+    title: string;
+    body: string;
+  } -->
