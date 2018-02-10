@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Post, BlogService } from '../blog.service';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 
 @Component({
   selector: 'app-edit',
@@ -16,13 +16,22 @@ export class EditComponent implements OnInit {
   savedPost = false;
   currentPostid: number;
 
-  constructor(private blogService: BlogService, private route: ActivatedRoute) {
+  constructor(private blogService: BlogService,
+    private route: ActivatedRoute, private router: Router) {
     this.currentPostid= this.route.snapshot.params['id'];
   }
 
   ngOnInit() {
     // when component is initialized
+    this.currentPostid= this.route.snapshot.params['id'];
     this.post = this.blogService.getPost(this.currentPostid);
+
+    this.route.params.subscribe(
+      (params: Params) => {
+        this.post.postid = params['id'];
+        this.currentPostid = params['id'];
+      }
+    );
   }
 
   onSave() {
@@ -37,6 +46,10 @@ export class EditComponent implements OnInit {
     this.disableSave = false;
   }
 
+  onLoadPreview() {
+    console.log("clicked onLoadPreview");
+    this.router.navigate(['preview', this.currentPostid]);
+  }
 
 
 }
