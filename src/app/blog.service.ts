@@ -9,9 +9,9 @@ export class BlogService {
     let dummyPost = this.newPost();
     this.fetchPosts();
     console.log(this.getPost(dummyPost.postid));
-    dummyPost.title="updated title";
-    this.updatePost(dummyPost);
-    console.log(this.getPost(dummyPost.postid));
+    // dummyPost.title="updated title";
+    // this.updatePost(dummyPost);
+    // console.log(this.getPost(dummyPost.postid));
     // this.deletePost(dummyPost.postid);
     // console.log(this.getPost(dummyPost.postid));
     

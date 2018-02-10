@@ -4,30 +4,37 @@
 <p>Fetched Title: {{ post.title }}</p>
 <p>Fetched Body: {{ post.body }}</p>
 
-<label>Title: </label>
-<input 
-  type="text" 
-  class="form-control" 
-  [(ngModel)]="post.title"
-  value="{{post.title}}"
->
+<div>
+  <label>Title: </label>
+  <input 
+    type="text" 
+    class="form-control" 
+    [(ngModel)]="post.title"
+    value="{{post.title}}"
+    (ngModelChange)="allowSave()">
+</div>
+
 <br/>
-<br/>
 
-<label>Body: </label>
-<textarea
-  type="text" 
-  class="form-control" 
-  [(ngModel)]="post.body"
-  value="{{post.body}}"> 
+<div>
+  <label>Body: </label>
+  <textarea
+    type="text" 
+    class="form-control" 
+    [(ngModel)]="post.body"
+    value="{{post.body}}"
+    (ngModelChange)="allowSave()"> 
+  
+  </textarea>
+</div>
+<p>{{post.modified}}</p>
 
-</textarea>
-
-<button (click)="onSave()">Save</button>
-<p *ngIf="savedPost">Post was saved.</p>
+<button (click)="onSave()"
+  [disabled]="disableSave">Save</button>
 
 <button (click)="onPreview()">Preview</button>
 
 <button (click)="onDelete()">Delete</button>
 
+<p *ngIf="savedPost">Post was saved.</p>
 
