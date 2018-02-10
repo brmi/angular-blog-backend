@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class BlogService {
   private posts: Post[]= []; //memory cache of all blog posts
-  private currentId: number = 0 //
 
   constructor() {
     this.fetchPosts();
@@ -52,8 +51,13 @@ export class BlogService {
     let currentDate = new Date();
     let newPost:Post = new Post;
 
+    // Find existing max postid
+    let maxID = Math.max.apply(Math,this.posts.map(function(item){return item.postid;}));
+    console.log("maxid", maxID);
+
     // create new post
-    newPost.postid = this.currentId + 1;
+
+    newPost.postid = maxID + 1;
     newPost.created = currentDate;
     newPost.modified = currentDate;
     newPost.title='default title';
@@ -65,11 +69,8 @@ export class BlogService {
     
     // Add to posts
     console.log("push post: ", this.posts.push(newPost));
-    
-    // update id
-    this.currentId += 1; 
 
-    console.log("Just created new post: ", newPost, " current id is now:  ", this.currentId);
+    console.log("Just created new post: ", newPost, " current id is now:  ", maxID + 1);
     // console.log("Posts: ", this.getPosts());
     return newPost; 
   }
