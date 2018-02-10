@@ -1,11 +1,18 @@
 <p>hello</p>
-<ul class="list">
-    <li *ngFor="let listItem of listItems">
-      <a routerLink="/edit/{{listItem.postid}}">
-        <span class="badge">{{listItem.postid}}</span> {{listItem.title}}
+<!-- <div *ngIf="new_post"> -->
+  <button (click)="newPost()">New Post</button>
+<!-- </div> -->
+
+<div>
+  <ul class="list">
+    <li *ngFor="let post of posts">
+      <a routerLink="/edit/{{post.postid}}">
+        <span class="badge">{{post.postid}}</span> {{post.title}}
       </a>
     </li>
   </ul>
+</div>
+
 
 
 
