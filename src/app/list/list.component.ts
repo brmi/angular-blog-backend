@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Post, BlogService } from '../blog.service';
-
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-list',
@@ -10,17 +10,21 @@ import { Post, BlogService } from '../blog.service';
 })
 export class ListComponent implements OnInit {
   
-  listItems: Post[];
+  posts: Post[];
+  new_post: Post;
 
-  constructor(private blogService: BlogService) {}
+  constructor(private blogService: BlogService, private router: Router) {}
 
   ngOnInit() {
     this.getPosts();
   }
 
   getPosts(): void {
-    this.blogService.getPosts()
-    .subscribe(listItems => this.listItems = listItems);
+    this.posts =  this.blogService.getPosts();
   }
 
+  newPost() {
+    this.new_post = this.blogService.newPost();
+    this.router.navigate(['edit', this.new_post.postid]);
+  }
 }

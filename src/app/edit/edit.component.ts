@@ -59,8 +59,8 @@ export class EditComponent implements OnInit {
   getPost(): void {
     const currentPostid = +this.route.snapshot.paramMap.get('id');
     console.log(currentPostid);
-    this.blogService.getPost(currentPostid)
-      .subscribe(post => this.post = post);
+    // this.blogService.getPost(currentPostid)
+    //   .subscribe(post => this.post = post);
   }
 
 }
