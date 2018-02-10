@@ -9,12 +9,12 @@ import { Router } from '@angular/router';
   providers: [BlogService]
 })
 export class ListComponent implements OnInit {
-  // @Input() post: Post;
 
   posts: Post[];
   new_post: Post;
 
   constructor(private blogService: BlogService, private router: Router) {
+
   }
 
   ngOnInit() {

@@ -55,6 +55,7 @@ export class EditComponent implements OnInit {
 
   allowSave() {
     this.disableSave = false;
+    this.onSave();
   }
 
   onLoadPreview() {
