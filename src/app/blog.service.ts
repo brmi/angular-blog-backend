@@ -114,7 +114,11 @@ export class BlogService {
     if(retrievedPost){
       // delete post from localStorage
       localStorage.removeItem(postid.toString());
-      // console.log("deleted from post arr: ", this.posts.splice(this.currentId-1, 1));
+      
+      // delete from local array
+      // get index of object with id:postid
+      let removeIndex = this.posts.map(function(item) { return (item.postid).toString(); }).indexOf(postid.toString());
+      this.posts.splice(removeIndex, 1);
     }
 
     

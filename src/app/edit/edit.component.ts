@@ -61,6 +61,7 @@ export class EditComponent implements OnInit {
     this.blogService.deletePost(this.currentPostid);
     this.deletedPost = true;
     this.blogService.getPosts();
+    this.router.navigate(['/']);
     
   }
 
