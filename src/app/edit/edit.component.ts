@@ -44,6 +44,7 @@ export class EditComponent implements OnInit {
     this.post.modified = tempPost.modified;
     this.savedPost = true;
     this.blogService.getPosts();
+    this.router.navigate(['/edit', this.currentPostid]);
   }
 
   onDelete() {

@@ -21,13 +21,6 @@ export class ListComponent implements OnInit {
 
   ngOnInit() {
     this.getPosts();
-
-    console.log("observable is gonna fire");
-    this.route.params.subscribe(
-      (params: Params) => {
-        this.post = this.blogService.getPost(params['id']);
-      }
-    );
   }
 
   getPosts(): void {
