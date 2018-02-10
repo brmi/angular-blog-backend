@@ -1,41 +1,46 @@
 <p>Edit Component</p>
 
-<p>Fetched Post ID: {{ post.postid }}</p>
-<p>Fetched Title: {{ post.title }}</p>
-<p>Fetched Body: {{ post.body }}</p>
+<div class="edit">
+  <p>Fetched Post ID: {{ post.postid }}</p>
 
-<div>
-  <label>Title: </label>
-  <input 
-    type="text" 
-    class="form-control" 
-    [(ngModel)]="post.title"
-    value="{{post.title}}"
-    (ngModelChange)="allowSave()">
-</div>
-
-<br/>
-
-<div>
-  <label>Body: </label>
-  <textarea
-    type="text" 
-    class="form-control" 
-    [(ngModel)]="post.body"
-    value="{{post.body}}"
-    (ngModelChange)="allowSave()"> 
+  <div>
+    <label>Title: </label>
+    <input 
+      type="text" 
+      class="form-control" 
+      [(ngModel)]="post.title"
+      value="{{post.title}}"
+      (ngModelChange)="allowSave()">
+  </div>
   
-  </textarea>
+  <br/>
+  
+  <div>
+    <label>Body: </label>
+    <textarea
+      type="text" 
+      class="form-control" 
+      [(ngModel)]="post.body"
+      value="{{post.body}}"
+      (ngModelChange)="allowSave()"> 
+    
+    </textarea>
+  </div>
+  <p>{{post.modified}}</p>
+  <p>{{post.title}}</p>
+  
+  <button (click)="onSave()"
+    [disabled]="disableSave">Save</button>
+  
+  <button (click)="onLoadPreview()">Preview</button>
+  
+  <button (click)="onDelete()">Delete</button>
+  
+  <p *ngIf="savedPost">Post was saved.</p>
+  <p *ngIf="deletedPost">Post was deleted.</p>
+
 </div>
-<p>{{post.modified}}</p>
 
-<button (click)="onSave()"
-  [disabled]="disableSave">Save</button>
+<app-list></app-list>
 
-<button (click)="onLoadPreview()">Preview</button>
-
-<button (click)="onDelete()">Delete</button>
-
-<p *ngIf="savedPost">Post was saved.</p>
-<p *ngIf="deletedPost">Post was deleted.</p>
 

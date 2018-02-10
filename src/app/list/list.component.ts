@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Post, BlogService } from '../blog.service';
 import { Router } from '@angular/router';
 
@@ -9,7 +9,8 @@ import { Router } from '@angular/router';
   providers: [BlogService]
 })
 export class ListComponent implements OnInit {
-  
+  @Input() post: Post;
+
   posts: Post[];
   new_post: Post;
 
