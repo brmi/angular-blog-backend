@@ -7,13 +7,6 @@ export class BlogService {
 
   constructor() {
     this.fetchPosts();
-    let dummyPost = this.newPost();
-    console.log("Get Posts: ", this.getPosts());
-    dummyPost.title="updated title";
-    this.updatePost(dummyPost);
-    console.log("Get Posts after update: ", this.getPosts());
-    this.deletePost(dummyPost.postid);
-    console.log("Get Posts after delete: ", this.getPosts());
     
   }
 
@@ -27,7 +20,7 @@ export class BlogService {
     console.log(localStorage.length);
     for(var i =0; i < localStorage.length; i++){
       let currentPost = JSON.parse(localStorage.getItem(localStorage.key(i)));
-      console.log("fetch posts current post: ", currentPost);
+      console.log("fetch posts current post from local storage: ", currentPost);
       this.posts.push(currentPost);
     }
 
@@ -36,7 +29,6 @@ export class BlogService {
 
   getPosts(): Post[] {
     /* DONE: This method simply returns posts */
-    console.log(this.posts);
     return this.posts;
   }
 
@@ -117,7 +109,7 @@ export class BlogService {
     }
 
     
-    console.log("Deleted Pos: ", retrievedPost.postid);
+    console.log("Deleted Post: ", retrievedPost.postid);
   }
 
 }
