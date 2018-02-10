@@ -1,8 +1,8 @@
 <p>hello</p>
 <ul class="list">
     <li *ngFor="let listItem of listItems">
-      <a routerLink="/edit/{{listItem.id}}">
-        <span class="badge">{{listItem.id}}</span> {{listItem.name}}
+      <a routerLink="/edit/{{listItem.postid}}">
+        <span class="badge">{{listItem.postid}}</span> {{listItem.title}}
       </a>
     </li>
   </ul>

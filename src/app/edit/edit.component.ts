@@ -25,7 +25,7 @@ export class EditComponent implements OnInit {
     console.log("clicked onSave function");
   }
 
-  getPost(): any {
+  getPost(): void {
     const currentPostid = +this.route.snapshot.paramMap.get('id');
     console.log(currentPostid);
     this.blogService.getPost(currentPostid)
