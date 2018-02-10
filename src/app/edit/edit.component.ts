@@ -14,6 +14,7 @@ export class EditComponent implements OnInit {
   post: Post; 
   disableSave = true;
   savedPost = false;
+  deletedPost = false;
   currentPostid: number;
 
   constructor(private blogService: BlogService,
@@ -37,9 +38,18 @@ export class EditComponent implements OnInit {
   onSave() {
     console.log("clicked onSave function. postid is ", this.currentPostid);
     this.blogService.updatePost(this.post);
-    let tempPost: Post =  this.blogService.getPost(this.currentPostid));
+    let tempPost: Post =  this.blogService.getPost(this.currentPostid);
     this.post.modified = tempPost.modified;
     this.savedPost = true;
+    this.blogService.getPosts();
+  }
+
+  onDelete() {
+    // post disappear from list pane
+    this.blogService.deletePost(this.currentPostid);
+    this.deletedPost = true;
+    this.blogService.getPosts();
+    
   }
 
   allowSave() {
@@ -48,6 +58,10 @@ export class EditComponent implements OnInit {
 
   onLoadPreview() {
     console.log("clicked onLoadPreview");
+    
+    // make sure to save data
+    this.onSave();
+
     this.router.navigate(['preview', this.currentPostid]);
   }
 

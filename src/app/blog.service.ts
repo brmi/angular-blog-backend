@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { port } from '_debugger';
 
 @Injectable()
 export class BlogService {
@@ -6,13 +7,12 @@ export class BlogService {
   private currentId: number = 0 //
 
   constructor() {
-    let dummyPost = this.newPost();
     this.fetchPosts();
+    let dummyPost = this.newPost();
+    dummyPost.title="updated title";
+    this.updatePost(dummyPost);
     console.log(this.getPost(dummyPost.postid));
-    // dummyPost.title="updated title";
-    // this.updatePost(dummyPost);
-    // console.log(this.getPost(dummyPost.postid));
-    // this.deletePost(dummyPost.postid);
+    this.deletePost(dummyPost.postid);
     // console.log(this.getPost(dummyPost.postid));
     
   }
@@ -24,17 +24,19 @@ export class BlogService {
       called inside the constructor so that all posts are retrieved 
       and be ready in memory when BlogService is created. 
     */
-    console.log("localStorage length: ", localStorage.length);
+    console.log(localStorage.length);
     for(var i =0; i < localStorage.length; i++){
-      console.log(localStorage.getItem(localStorage.key(i)));
       let currentPost = JSON.parse(localStorage.getItem(localStorage.key(i)));
-      console.log("Current Post: ", currentPost);
+      console.log("fetch posts current post: ", currentPost);
       this.posts.push(currentPost);
     }
+
+    console.log("this.posts after Fetch Post: ", this.posts);
   }
 
   getPosts(): Post[] {
     /* DONE: This method simply returns posts */
+    console.log(this.posts);
     return this.posts;
   }
 
@@ -75,6 +77,7 @@ export class BlogService {
     this.currentId += 1; 
 
     console.log("Just created new post: ", newPost, " current id is now:  ", this.currentId);
+    console.log("Posts: ", this.posts);
     return newPost; 
   }
 
@@ -105,12 +108,15 @@ export class BlogService {
     */
 
     let retrievedPost = JSON.parse(localStorage.getItem(postid.toString()));
-    
+    let postidToString = postid.toString();
     if(retrievedPost){
       // delete post from localStorage
-      localStorage.removeItem(retrievedPost.postid.toString());
+      localStorage.removeItem(localStorage.postidToString);
     }
+
+    this.posts.splice(this.currentId-1, 1);
     console.log("Deleted Post: ", retrievedPost.postid);
+    console.log("Posts after delete: ", this.getPosts());
   }
 
 }
