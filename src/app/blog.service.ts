@@ -7,7 +7,6 @@ export class BlogService {
 
   constructor() {
     this.fetchPosts();
-    
   }
 
   fetchPosts(): void {

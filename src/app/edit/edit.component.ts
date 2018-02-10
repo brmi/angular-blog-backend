@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Post, BlogService } from '../blog.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
+import { ListComponent } from '../list/list.component';
 
 @Component({
   selector: 'app-edit',
@@ -10,7 +11,10 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 })
 
 export class EditComponent implements OnInit {
-  post: Post; 
+
+  @Input() post: Post;
+
+  // post: Post; 
   disableSave = true;
   savedPost = false;
   deletedPost = false;
