@@ -52,6 +52,11 @@ export class BlogService {
 
     // Find existing max postid
     let maxID = Math.max.apply(Math,this.posts.map(function(item){return item.postid;}));
+
+    // For Clear Storage case 
+    if (maxID < 0) {
+      maxID = 0;
+    }
     console.log("maxid", maxID);
 
     // create new post
