@@ -1,0 +1,26 @@
+.preview{
+    padding: 30px;
+}
+
+button{
+	background-color: #fff;
+    margin: auto;
+    color: #000;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(228, 228, 228, 0.16), 0 2px 4px rgba(230, 230, 230, 0.23);
+    font-size: 20px;
+    padding: 5px;
+    background: none;
+    cursor: pointer;
+}
+
+:host {
+    display:flex;
+    justify-content: space-around;
+   }
+
+@media screen and (max-width: 767px) {
+    :host {
+        flex-direction: column;
+       }
+}

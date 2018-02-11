@@ -1,1 +1,7 @@
-<p>Preview Component</p>
+<div app-list [post]="post"></div>
+
+<div class="preview">
+    <button (click)="onEdit()">Edit</button>
+    <div [innerHTML]="resultTitle"></div>
+    <div [innerHTML]="resultBody"></div>
+</div>
