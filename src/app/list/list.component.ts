@@ -3,7 +3,7 @@ import { Post, BlogService } from '../blog.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
 @Component({
-  selector: 'app-list',
+  selector: '[app-list]',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.css'],
   // providers: [BlogService]

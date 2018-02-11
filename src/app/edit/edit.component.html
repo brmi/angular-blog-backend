@@ -1,10 +1,9 @@
-<p>Edit Component</p>
+<div app-list [post]="post"></div>
 
 <div class="edit">
-  <p>Fetched Post ID: {{ post.postid }}</p>
 
   <div>
-    <label>Title: </label>
+    <label class="title">Title: </label>
     <input 
       type="text" 
       class="form-control" 
@@ -13,10 +12,8 @@
       (ngModelChange)="allowSave()">
   </div>
   
-  <br/>
-  
   <div>
-    <label>Body: </label>
+    <label class="body">Body: </label>
     <textarea
       type="text" 
       class="form-control" 
@@ -26,7 +23,7 @@
     
     </textarea>
   </div>
-  <p>{{post.modified}}</p>
+  <p class="modifiedTime">{{post.modified | date:'medium'}}</p>
   
   <button (click)="onSave()"
     [disabled]="disableSave">Save</button>
@@ -34,12 +31,9 @@
   <button (click)="onLoadPreview()">Preview</button>
   
   <button (click)="onDelete()">Delete</button>
-  
-  <p *ngIf="savedPost">Post was saved.</p>
-  <p *ngIf="deletedPost">Post was deleted.</p>
 
 </div>
 
-<app-list [post]="post"></app-list>
+
 
 

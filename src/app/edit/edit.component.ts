@@ -4,7 +4,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { ListComponent } from '../list/list.component';
 
 @Component({
-  selector: 'app-edit',
+  selector: '[app-edit]',
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.css'],
   // providers: [BlogService]

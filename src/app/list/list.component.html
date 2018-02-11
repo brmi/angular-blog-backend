@@ -1,24 +1,10 @@
 
-<!-- <div *ngIf="new_post"> -->
+<div class="list">
   <button (click)="newPost()">New Post</button>
-<!-- </div> -->
-
-<div>
-  <ul class="list">
-    <li *ngFor="let post of posts | sort:'postid'">
-      <span>{{post.created | date:'medium' }}</span>
-      <button (click)="onClickPost(post.postid)">
-        <span class="badge">{{post.postid}}</span> {{post.title}}
-      </button>
+  <ul class="listtag">
+    <li (click)="onClickPost(post.postid)" *ngFor="let post of posts | sort:'postid'">
+      <span class="createdTime" >{{post.created | date:'medium' }}</span>
+      <a>{{post.title}} </a>
     </li>
   </ul>
 </div>
-
-
-  <!-- export class Post {
-    postid: number;
-    created: Date;
-    modified: Date;
-    title: string;
-    body: string;
-  } -->
