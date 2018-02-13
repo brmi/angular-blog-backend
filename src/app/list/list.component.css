@@ -6,9 +6,9 @@
     list-style: none;
 }
 
-a:hover{
+/* a:hover{
     color: blue;
-}
+} */
 
 a{
     font-weight: 700;
@@ -25,10 +25,24 @@ li{
     border-radius: 5px;
 }
 
-li:hover{
+/* li:hover{
     cursor: pointer;
     color: blue;
-}
+} */
+
+.list li.selected:hover {
+    background-color: #BBD8DC !important;
+    color: darkred;
+  }
+ li:hover {
+    color: #607D8B;
+    background-color: #DDD;
+    left: .1em;
+  }
+  .selected {
+    background-color: #CFD8DC !important;
+    color: darkred;
+  }
 
 .createdTime{
     background-color: rgb(255, 239, 241);
@@ -47,4 +61,8 @@ button{
     padding: 5px;
     background: none;
     cursor: pointer;
+}
+
+button:hover {
+    background-color: rgb(231, 231, 231);
 }

@@ -10,9 +10,10 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 })
 export class ListComponent implements OnInit {
   @Input() post: Post;
-
+  
   posts: Post[];
   new_post: Post;
+  selected_post: Post;
 
   constructor(private blogService: BlogService, private router: Router, 
     private route: ActivatedRoute) {
@@ -36,9 +37,9 @@ export class ListComponent implements OnInit {
     this.router.navigate(['edit', this.new_post.postid]);
   }
 
-  onClickPost(postid: number) {
+  onClickPost(post: Post, postid: number) {
     console.log("clicked onClickPost", postid);
-
+    this.selected_post = post;
     this.router.navigate(['/edit', postid]);
   }
 }
