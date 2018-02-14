@@ -13,7 +13,8 @@ import { ArraySortPipe } from './array.sort.pipe';
 const appRoutes: Routes = [
   { path: '', component: ListComponent },
   { path: 'edit/:id', component: EditComponent },
-  { path: 'preview/:id', component: PreviewComponent }
+  { path: 'preview/:id', component: PreviewComponent },
+  { path: "**", component: ListComponent}
 ];
 
 @NgModule({

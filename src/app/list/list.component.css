@@ -38,6 +38,7 @@ li{
     color: #607D8B;
     background-color: #DDD;
     left: .1em;
+    cursor: pointer;
   }
   .selected {
     background-color: #CFD8DC !important;

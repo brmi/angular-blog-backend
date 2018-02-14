@@ -21,32 +21,37 @@ export class EditComponent implements OnInit {
   constructor(private blogService: BlogService,
     private route: ActivatedRoute, private router: Router) {
     this.currentPostid= this.route.snapshot.params['id'];
+    this.post = this.blogService.getPost(this.currentPostid);
+    
+    if(!this.post){
+      console.log("invalid postid");
+      this.router.navigate(['/']);
+    }
   }
 
   ngOnInit() {
     // when component is initialized
-    this.currentPostid= this.route.snapshot.params['id'];
-    this.post = this.blogService.getPost(this.currentPostid);
+    // this.currentPostid= this.route.snapshot.params['id'];
+    // this.post = this.blogService.getPost(this.currentPostid);
 
-    this.route.params.subscribe(
-      (params: Params) => {
-        this.post.postid = params['id'];
-        this.currentPostid = params['id'];
-        this.post = this.blogService.getPost(params['id']);
-      }
-    );
+      this.route.params.subscribe(
+        (params: Params) => {
+          this.post.postid = params['id'];
+          this.currentPostid = params['id'];
+          this.post = this.blogService.getPost(params['id']);
+        }
+      );
+
   }
 
   tempSave() {
     this.blogService.updatePost(this.post);
     let tempPost: Post =  this.blogService.getPost(this.currentPostid);
     this.savedPost = true;
-    console.log("temp save: ", this.blogService.getPosts());
     // this.router.navigate(['/edit', this.currentPostid]);
   }
 
   onSave() {
-    console.log("clicked onSave function. postid is ", this.currentPostid);
     this.blogService.updatePost(this.post);
     let tempPost: Post =  this.blogService.getPost(this.currentPostid);
     this.post.modified = tempPost.modified;
@@ -71,7 +76,6 @@ export class EditComponent implements OnInit {
   }
 
   onLoadPreview() {
-    console.log("clicked onLoadPreview");
     
     // make sure to save data
     this.onSave();
@@ -81,7 +85,6 @@ export class EditComponent implements OnInit {
 
   getPost(): void {
     const currentPostid = +this.route.snapshot.paramMap.get('id');
-    console.log(currentPostid);
   }
 
 }
