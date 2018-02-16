@@ -13,7 +13,7 @@ export class ListComponent implements OnInit {
   
   posts: Post[];
   new_post: Post;
-  selected_post: Post;
+  selected_post: number;
 
   constructor(private blogService: BlogService, private router: Router, 
     private route: ActivatedRoute) {
@@ -22,6 +22,7 @@ export class ListComponent implements OnInit {
 
   ngOnInit() {
     this.posts = this.blogService.getPosts();
+    this.selected_post = this.post.postid;
   }
 
   // updateTitle(): void {
@@ -39,7 +40,6 @@ export class ListComponent implements OnInit {
 
   onClickPost(post: Post, postid: number) {
     console.log("clicked onClickPost", postid);
-    this.selected_post = post;
     this.router.navigate(['/edit', postid]);
   }
 }
