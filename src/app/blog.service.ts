@@ -15,10 +15,9 @@ export class BlogService {
       called inside the constructor so that all posts are retrieved 
       and be ready in memory when BlogService is created. 
     */
-    console.log(localStorage.length);
     for(var i =0; i < localStorage.length; i++){
       let currentPost = JSON.parse(localStorage.getItem(localStorage.key(i)));
-      console.log("fetch posts current post from local storage: ", currentPost);
+      // console.log("fetch posts current post from local storage: ", currentPost);
       this.posts.push(currentPost);
     }
 

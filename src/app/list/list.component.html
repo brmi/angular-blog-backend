@@ -2,9 +2,17 @@
 <div class="list">
   <button (click)="newPost()">New Post</button>
   <ul class="listtag">
-    <li (click)="onClickPost(p, p.postid)" [class.selected]="p.postid === post.postid" *ngFor="let p of posts | sort:'postid'" >
-      <span class="createdTime" >{{p.created | date:'medium' }}</span>
-      <a>{{p.title}} </a>
-    </li>
+    <div *ngIf="post">
+      <li (click)="onClickPost(p, p.postid)" [class.selected]="p.postid === post.postid" *ngFor="let p of posts | sort:'postid'" >
+        <span class="createdTime" >{{p.created | date:'medium' }}</span>
+        <a>{{p.title}} </a>
+      </li>
+    </div>
+    <div *ngIf="!post">
+        <li (click)="onClickPost(p, p.postid)" *ngFor="let p of posts | sort:'postid'" >
+          <span class="createdTime" >{{p.created | date:'medium' }}</span>
+          <a>{{p.title}} </a>
+        </li>
+    </div>
   </ul>
 </div>

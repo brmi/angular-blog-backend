@@ -22,7 +22,10 @@ export class ListComponent implements OnInit {
 
   ngOnInit() {
     this.posts = this.blogService.getPosts();
-    this.selected_post = this.post.postid;
+    if (this.post){
+      this.selected_post = this.post.postid;
+    }
+    
   }
 
   // updateTitle(): void {
