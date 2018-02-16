@@ -15,7 +15,12 @@ export class PreviewComponent implements OnInit {
   resultBody;
 
   constructor(private blogService: BlogService,
-    private route: ActivatedRoute, private router: Router) { }
+    private route: ActivatedRoute, private router: Router) {
+      if(!this.post){
+        console.log("invalid postid");
+        this.router.navigate(['/']);
+      }
+     }
 
   ngOnInit() {
         // when component is initialized
