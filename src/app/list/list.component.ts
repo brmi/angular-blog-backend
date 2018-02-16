@@ -38,7 +38,7 @@ export class ListComponent implements OnInit {
   }
 
   onClickPost(post: Post, postid: number) {
-    console.log("clicked onClickPost", postid);
+    // console.log("clicked onClickPost", postid);
     this.selected_post = post;
     this.router.navigate(['/edit', postid]);
   }
