@@ -17,14 +17,14 @@ export class ListComponent implements OnInit {
 
   constructor(private blogService: BlogService, private router: Router, 
     private route: ActivatedRoute) {
-
+      this.posts = this.blogService.getPosts();
+      if (this.post){
+        this.selected_post = this.post.postid;
+      }
   }
 
   ngOnInit() {
-    this.posts = this.blogService.getPosts();
-    if (this.post){
-      this.selected_post = this.post.postid;
-    }
+
     
   }
 
