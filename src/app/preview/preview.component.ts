@@ -16,17 +16,17 @@ export class PreviewComponent implements OnInit {
 
   constructor(private blogService: BlogService,
     private route: ActivatedRoute, private router: Router) {
- 
+      this.currentPostid= this.route.snapshot.params['id'];
+      this.post = this.blogService.getPost(this.currentPostid);
+      if(!this.post){
+        console.log("invalid postid");
+        this.router.navigate(['/']);
+      }
      }
 
   ngOnInit() {
         // when component is initialized
-        this.currentPostid= this.route.snapshot.params['id'];
-        this.post = this.blogService.getPost(this.currentPostid);
-        if(!this.post){
-          console.log("invalid postid");
-          this.router.navigate(['/']);
-        }
+       
         this.route.params.subscribe(
           (params: Params) => {
             this.post.postid = params['id'];
