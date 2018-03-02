@@ -61,7 +61,7 @@ router.get('/blog/:username/:postid', function(req, res, next) {
     var parsedBody = reader.parse(result[0].body);
     result[0].body = writer.render(parsedBody);
 
-    res.render('blog', { title: req.params.username, posts: result });
+    res.render('blog', { username: req.params.username, posts: result, nextStartingID: 0 });
   })
   .catch(function(err){
     console.log(err);
