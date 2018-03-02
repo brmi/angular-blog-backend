@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Blog</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1> Blog</h1>
+    <p>Welcome to <%= username %></p>
+
+    <ul>
+        <% for(let i = 0; i < posts.length; i++) { %>
+            <li>
+                <a href='/blog/<%= username %>/<%= posts[i].postid %>'>
+                    <%- posts[i].title %>
+                    <%- posts[i].body %>
+                </a>
+            </li>
+        <% } %>
+        <% if (nextStartingID > 0) { %>
+            <a href='/blog/<%= username %>/?start=<%= nextStartingID %>'> next </a>
+        <% } %>
+    </ul>
+
+  </body>
+</html>
