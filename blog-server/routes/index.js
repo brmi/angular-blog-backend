@@ -33,7 +33,6 @@ router.get('/blog/:username', function(req, res, next) {
       count += 1;
     }
 
-    count += 1;
     
     if(result.length < 5){
       count = 0;
