@@ -34,6 +34,10 @@ router.get('/blog/:username', function(req, res, next) {
     }
 
     count += 1;
+    
+    if(result.length < 5){
+      count = 0;
+    }
     res.render('blog', { username: req.params.username, posts: result, nextStartingID: count });
   })
   .catch(function(err){
