@@ -1,8 +1,33 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway:800|Source+Sans+Pro');
+
 body {
   padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font: 14px "Source Sans Pro", Helvetica, Arial, sans-serif;
 }
 
 a {
-  color: #00B7FF;
+  color: black;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+
+.title p{
+	margin-bottom: 5px;
+	font-size: 32px;
+	font-family: 'Raleway', Helvetica, sans-serif;
+}
+
+.post {
+	width: 50%;
+	padding: 10px;
+	margin-bottom: 20px;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+
+.body p{
+	font-size: 26px;
+	margin-top: 5px;
+	color: black;
 }
