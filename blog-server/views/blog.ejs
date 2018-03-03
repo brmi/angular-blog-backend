@@ -11,6 +11,7 @@
 
     <% for(let i = 0; i < posts.length; i++) { %>
         <div class="post">
+            <p>postid: <%- posts[i].postid %> </p>
             <a class="title" href='/blog/<%= username %>/<%= posts[i].postid %>'>
                 <%- posts[i].title %>  
             </a>
