@@ -9,12 +9,17 @@
     <p>Welcome to <%= title %></p>
 
     <div>
-      <p>Username:</p>
-      <input type="text" name="username" id="username" placeholder="Please enter username" required />
-      <p>Password:</p>
-      <input type="password" name="password" id="password" class="textbox2" placeholder="Please enter password">
-      
-      <button type="submit">Login</button>
+
+      <form method="get" action="/login">
+        <p>Username:</p>
+        <p>Inputted username: <%= uname %></p>
+        <input type="text" name="username" placeholder="Please enter username">
+        <p>Password:</p>
+        <p>Inputted password: <%= pw %></p>
+        <input type="text" name="password" placeholder="Please enter password">
+        <input type="submit" value="Submit">
+    </form>
+
     </div>
 
 
