@@ -5,7 +5,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
+var jwt = require('jsonwebtoken');  
 var express = require('express');
 var app = express();
 var MongoDB = require('./db');
@@ -30,6 +30,32 @@ mongoConnection = db.connectDB( function( err ) {
 
   app.use('/', index);
   app.use('/users', users);
+
+  app.use('/api/:username', function(req, res, next) {
+    let key = 'C-UFRaksvPKhx1txJYFcut3QGxsafPmwCY6SCly3G6c';
+    console.log("BLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAH");
+    var cookie = req.cookies['jwt'];
+    if (!cookie) {
+      console.log("Authentication error: No cookie");
+      res.render('login', { title: 'Login', uname: req.params.username });
+    }
+    else {
+      jwt.verify(req.cookies['jwt'], key, function(err, decoded) {
+        console.log(decoded);
+        console.log(decoded.usr);
+        if (decoded.usr != req.params.username){
+          // bad
+          console.log("Authentication error: cookie and login do not match. Attempt to access: " + req.params.username + ", but token is: " + decoded.usr);
+          res.render('login', { title: 'Login', uname: req.params.username });
+        }
+        else {
+          // good
+          console.log("Successful authentication!");
+          next();
+        }
+      });
+    }
+  });
 
   app.get('/api/:username', function(req, res, next){
     
@@ -211,6 +237,8 @@ mongoConnection = db.connectDB( function( err ) {
       });
 
   });
+
+  
 
   // catch 404 and forward to error handler
   app.use(function(req, res, next) {

@@ -5,9 +5,7 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-    <h1> Login</h1>
-    <p>Welcome to <%= title %></p>
-
+    <h1> <%= title %></h1>
     <div>
 
       <form method="get" action="/login">
@@ -15,7 +13,6 @@
         <p>Inputted username: <%= uname %></p>
         <input type="text" name="username" placeholder="Please enter username">
         <p>Password:</p>
-        <p>Inputted password: <%= pw %></p>
         <input type="text" name="password" placeholder="Please enter password">
         <input type="submit" value="Submit">
     </form>

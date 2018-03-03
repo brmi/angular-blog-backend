@@ -86,15 +86,11 @@ router.get('/login', function(req, res, next) {
   const user = db.collection('Users').find({ username: req.query.username });
   var userArray = user.toArray().then(function(result) {
     if (result.length > 0) {
-      console.log("??????????????????????????????????????????????????????????????????");
-      console.log("DB Username:" + result[0].username);
-      console.log("DB Password:" + result[0].password);
-
       let hash = result[0].password;
       bcrypt.compare(req.query.password, hash, function(err, res2) {
         if (res2 == false ){
           console.log("Passwords did not match.");
-          res.render('login', { title: 'Login', uname: req.query.username, pw: req.query.password });
+          res.render('login', { title: 'Login', uname: req.query.username });
         }
         else {
           console.log("Passwords matched!");
@@ -120,23 +116,12 @@ router.get('/login', function(req, res, next) {
     }
     else {
       console.log("No user with that name found.")
-      res.render('login', { title: 'Login', uname: req.query.username, pw: req.query.password });
+      res.render('login', { title: 'Login', uname: req.query.username });
     }
   })
   .catch(function(err){
     console.log(err);
   });
-
-
-  // // Replace this with correct DB checking of username and password
-  // if (req.query.username == 'username' && req.query.password == 'password') {
-  //   res.redirect('/');
-  // }
-  
-  
-
-  // 
- 
 });
 
 
