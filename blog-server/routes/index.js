@@ -94,9 +94,8 @@ router.get('/login', function(req, res, next) {
         }
         else {
           console.log("Passwords matched!");
-          
           const payload = {
-            "exp": Math.floor(Date.now() / 1000) + (120 * 60),
+            "exp": Math.floor(Date.now() / 1000) + (120 * 60), 
             "usr": req.query.username
           };
 

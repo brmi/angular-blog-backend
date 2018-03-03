@@ -41,17 +41,24 @@ mongoConnection = db.connectDB( function( err ) {
     }
     else {
       jwt.verify(req.cookies['jwt'], key, function(err, decoded) {
-        console.log(decoded);
-        console.log(decoded.usr);
-        if (decoded.usr != req.params.username){
-          // bad
-          console.log("Authentication error: cookie and login do not match. Attempt to access: " + req.params.username + ", but token is: " + decoded.usr);
-          res.render('login', { title: 'Login', uname: req.params.username });
+        if (decoded) {
+          console.log(decoded);
+          console.log(decoded.usr);
+          if (decoded.usr != req.params.username){
+            // bad
+            console.log("Authentication error: cookie and login do not match. Attempt to access: " + req.params.username + ", but token is: " + decoded.usr);
+            res.render('login', { title: 'Login', uname: req.params.username });
+          }
+          else {
+            // good
+            console.log("Successful authentication!");
+            next();
+          }
         }
-        else {
-          // good
-          console.log("Successful authentication!");
-          next();
+        else { 
+          // Invalid token
+          console.log("Authentication error: invalid token, " + cookie);
+          res.render('login', { title: 'Login', uname: req.params.username });
         }
       });
     }
