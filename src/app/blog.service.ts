@@ -15,6 +15,30 @@ export class BlogService {
       called inside the constructor so that all posts are retrieved 
       and be ready in memory when BlogService is created. 
     */
+
+    var cookie = document.cookie;
+    console.log("cookie", cookie);
+
+    var customXMLHttpRequest = (function (jwtoken) {
+
+        function getXMLHttpRequest(method, url, async){
+            var xmlHttpRequest = new XMLHttpRequest();
+            xmlHttpRequest.open(method, url, true);
+            // xmlHttpRequest.withCredentials = true;
+            xmlHttpRequest.setRequestHeader('Authorization', 'Bearer ' + jwtoken);
+            xmlHttpRequest.onreadystatechange = function() {
+                if (xmlHttpRequest.readyState == XMLHttpRequest.DONE) {
+                    alert(xmlHttpRequest.responseText);
+                }
+            }
+            return xmlHttpRequest;
+        }
+        return getXMLHttpRequest;
+    })(cookie);
+
+    var xmlHttpRequest = customXMLHttpRequest('get','http://localhost:3000/api/cs144',true);
+    xmlHttpRequest.send();
+
     for(var i =0; i < localStorage.length; i++){
       let currentPost = JSON.parse(localStorage.getItem(localStorage.key(i)));
       // console.log("fetch posts current post from local storage: ", currentPost);

@@ -9,6 +9,15 @@ var jwt = require('jsonwebtoken');
 var express = require('express');
 var app = express();
 var MongoDB = require('./db');
+var routes = require('./routes/index');
+// const cors = require('cors')
+
+// const corsOptions = {
+//     origin: 'http://localhost:4200',
+//     credentials: true,
+
+// }
+// app.use(cors(corsOptions));
 
 /* Connect to Mongo */ 
 mongoConnection = db.connectDB( function( err ) {
@@ -31,38 +40,48 @@ mongoConnection = db.connectDB( function( err ) {
   app.use('/', index);
   app.use('/users', users);
 
-  app.use('/api/:username', function(req, res, next) {
-    let key = 'C-UFRaksvPKhx1txJYFcut3QGxsafPmwCY6SCly3G6c';
-    console.log("BLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAH");
-    var cookie = req.cookies['jwt'];
-    if (!cookie) {
-      console.log("Authentication error: No cookie");
-      res.render('login', { title: 'Login', uname: req.params.username });
-    }
-    else {
-      jwt.verify(req.cookies['jwt'], key, function(err, decoded) {
-        if (decoded) {
-          console.log(decoded);
-          console.log(decoded.usr);
-          if (decoded.usr != req.params.username){
-            // bad
-            console.log("Authentication error: cookie and login do not match. Attempt to access: " + req.params.username + ", but token is: " + decoded.usr);
-            res.render('login', { title: 'Login', uname: req.params.username });
-          }
-          else {
-            // good
-            console.log("Successful authentication!");
-            next();
-          }
-        }
-        else { 
-          // Invalid token
-          console.log("Authentication error: invalid token, " + cookie);
-          res.render('login', { title: 'Login', uname: req.params.username });
-        }
-      });
-    }
-  });
+  app.use(routes);
+
+  // app.use(function(req, res, next) {
+  //   res.header("Access-Control-Allow-Origin", "http://localhost:4200/");
+  //   res.header('Access-Control-Allow-Credentials', true);
+  //   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  //   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  //   next();
+  // });
+
+  // app.use('/api/:username', function(req, res, next) {
+  //   let key = 'C-UFRaksvPKhx1txJYFcut3QGxsafPmwCY6SCly3G6c';
+  //   console.log("BLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAH");
+  //   var cookie = req.cookies['jwt'];
+  //   if (!cookie) {
+  //     console.log("Authentication error: No cookie");
+  //     res.render('login', { title: 'Login', uname: req.params.username });
+  //   }
+  //   else {
+  //     jwt.verify(req.cookies['jwt'], key, function(err, decoded) {
+  //       if (decoded) {
+  //         console.log(decoded);
+  //         console.log(decoded.usr);
+  //         if (decoded.usr != req.params.username){
+  //           // bad
+  //           console.log("Authentication error: cookie and login do not match. Attempt to access: " + req.params.username + ", but token is: " + decoded.usr);
+  //           res.render('login', { title: 'Login', uname: req.params.username });
+  //         }
+  //         else {
+  //           // good
+  //           console.log("Successful authentication!");
+  //           next();
+  //         }
+  //       }
+  //       else { 
+  //         // Invalid token
+  //         console.log("Authentication error: invalid token, " + cookie);
+  //         res.render('login', { title: 'Login', uname: req.params.username });
+  //       }
+  //     });
+  //   }
+  // });
 
   app.get('/api/:username', function(req, res, next){
     
@@ -82,6 +101,7 @@ mongoConnection = db.connectDB( function( err ) {
         res.status(200).send(response);
         })
       .catch(function(err){
+        res.status(400).send();
         console.log(err);
       });
 
