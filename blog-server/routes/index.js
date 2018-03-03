@@ -3,6 +3,7 @@ var router = express.Router();
 var MongoDB = require('../db');
 var commonmarkLibrary = require('commonmark');
 var dbConnection = MongoDB.getDB();
+var bcrypt = require('bcrypt');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -18,7 +19,7 @@ router.get('/blog/:username', function(req, res, next) {
   var perPage = 5;
 
   const db = dbConnection.db('BlogServer');
-  console.log(db);
+
   //Load db & colletions
   const postsCollection = db.collection('Posts').find({ username: req.params.username }).skip(startID-1).limit(perPage);
   var postsArray = postsCollection.toArray().then(function(result) {
@@ -77,32 +78,32 @@ router.get('/login', function(req, res, next) {
   console.log(req.query.password);
   const db = dbConnection.db('BlogServer');
 
-  console.log(db);
-  console.log("????????????????????????????????????????????????????????????");
-  const postsCollection = db.collection('Posts').find({ username: req.params.username });
-  var postsArray = postsCollection.toArray().then(function(result) {
-
-    console.log(result);
-    console.log(result[0].title);
-  })
-  .catch(function(err){
-    console.log(err);
-  });
-console.log("????????????????????????????????????????????????????????????");
-
-
-
-  const user = db.collection('Users').find({ username: req.params.username });
+  const user = db.collection('Users').find({ username: req.query.username });
   var userArray = user.toArray().then(function(result) {
-      console.log("RESULT IS: " + result);
-      console.log("!!!!!!!!!!!!!!!!" + result[0]);
-      console.log("!!!!!!!!!!!!!!!!" + result[1]);
+    if (result.length > 0) {
+      console.log("??????????????????????????????????????????????????????????????????");
+      console.log("DB Username:" + result[0].username);
+      console.log("DB Password:" + result[0].password);
+
+      let hash = result[0].password;
+      bcrypt.compare(req.query.password, hash, function(err, res) {
+        // res == true
+        if (res == true){
+          console.log("Passwords matched!");
+        }
+        else {
+          console.log("Passwords did not match.");
+        }
+      });
+    }
+    else {
+      console.log("No user with that name found.")
+    }
   })
   .catch(function(err){
     console.log(err);
   });
 
-  console.log("???? Hello" + userArray);
   
   // // TODO: If Redirection provided
   // if (req.query.username == 'username' && req.query.redirect){
@@ -117,8 +118,7 @@ console.log("????????????????????????????????????????????????????????????");
   
 
   res.render('login', { title: 'Login', uname: req.query.username, pw: req.query.password });
-  
-  // res.send('Response send to client::'+req.query.username);
+ 
 });
 
 
