@@ -8,10 +8,11 @@ var bodyParser = require('body-parser');
 
 var express = require('express');
 var app = express();
+var MongoDB = require('./db');
 
 /* Connect to Mongo */ 
 mongoConnection = db.connectDB( function( err ) {
-
+  var dbConnection = MongoDB.getDB();
   var index = require('./routes/index');
   var users = require('./routes/users');
 
@@ -29,6 +30,143 @@ mongoConnection = db.connectDB( function( err ) {
 
   app.use('/', index);
   app.use('/users', users);
+
+  app.get('/api/:username', function(req, res, next){
+    
+    const db = dbConnection.db('BlogServer');
+
+    //Load db & collections
+    const postsCollection = db.collection('Posts').find({ username: req.params.username });
+    var postsArray = postsCollection.toArray().then(function(result) {
+      console.log(result);
+        // check that each post has five fields: postid, title, body, created, and modified
+        response = [];
+        for(i=0; i< result.length; i++){
+          if(result[i].postid && result[i].title && result[i].body && result[i].created && result[i].modified){
+            response.push(result[i]);
+          }
+        }
+        res.status(200).send(response);
+        })
+      .catch(function(err){
+        console.log(err);
+      });
+
+  });
+
+  app.get('/api/:username/:postid', function(req, res, next){
+    
+    const db = dbConnection.db('BlogServer');
+    
+    //Load db & collections
+    const postsCollection = db.collection('Posts').find({ username: req.params.username, postid: parseInt(req.params.postid) });
+    var postsArray = postsCollection.toArray().then(function(result) {
+
+        // check that each post has five fields: postid, title, body, created, and modified
+        response = [];
+        
+        for(i=0; i< result.length; i++){
+          if(result[i].title && result[i].body && result[i].created && result[i].modified){
+            response.push(result[i]);
+          }
+        }
+        if (response.length == 0){
+          res.status(404).send(response);
+        } else {
+          res.status(200).send(response);
+        }
+        
+        })
+      .catch(function(err){
+        console.log(err);
+      });
+
+  });
+
+  app.post('/api/:username/:postid', function(req, res, next){
+    
+    const db = dbConnection.db('BlogServer');
+    
+    //Load db & collections
+
+    
+    const postsCollection = db.collection('Posts').find({ username: req.params.username, postid: parseInt(req.params.postid) });
+    var postsArray = postsCollection.toArray().then(function(result) {
+      
+      if(result.legnth == 0){
+        // post already exists
+        
+        res.status(400).send();
+      } else {
+        // post does not exist
+
+        db.collection('Posts').insert({
+          postid: parseInt(req.body.postid),
+          username: req.body.username,
+          title: req.body.title,
+          body: req.body.body,
+          created: new Date().getTime(),
+          modified: new Date().getTime()
+        }, function(err, result){
+          if (err) {
+            console.log ("Error ", err);
+          } else {
+            console.log("Successfully inserted into posts database");
+          }
+        });
+
+        res.status(201).send();
+      }
+        
+      })
+      .catch(function(err){
+        console.log(err);
+      });
+
+  });
+
+  app.put('/api/:username/:postid', function(req, res, next){
+    
+    const db = dbConnection.db('BlogServer');
+    
+    //Load db & collections
+
+    
+    const postsCollection = db.collection('Posts').find({ username: req.params.username, postid: parseInt(req.params.postid) });
+    var postsArray = postsCollection.toArray().then(function(result) {
+      
+      if(result.legnth !== 0){
+        // post already exists
+        if(!req.body.title && !req.body.body){
+          console.log("no title or body");
+          res.status(400).send();
+        }
+
+        db.collection('Posts').update({username: req.params.username, postid: parseInt(req.params.postid)}, {
+          title: req.body.title,
+          body: req.body.body,
+          modified: new Date().getTime()
+        }, function(err, result){
+          if (err) {
+            console.log ("Error ", err);
+          } else {
+            console.log("Successfully inserted into posts database");
+          }
+        });
+
+        res.status(200).send();
+      } else {
+        // post does not exist
+        console.log("post does not exist...");
+        res.status(400).send();
+      }
+        
+      })
+      .catch(function(err){
+        console.log(err);
+      });
+
+  });
 
   // catch 404 and forward to error handler
   app.use(function(req, res, next) {

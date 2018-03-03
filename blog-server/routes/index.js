@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var MongoDB = require('../db');
 var commonmarkLibrary = require('commonmark');
+var MongoDB = require('../db');
 var dbConnection = MongoDB.getDB();
 
 /* GET home page. */
