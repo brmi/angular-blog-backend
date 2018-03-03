@@ -4,6 +4,8 @@ var MongoDB = require('../db');
 var commonmarkLibrary = require('commonmark');
 var dbConnection = MongoDB.getDB();
 var bcrypt = require('bcrypt');
+var jwt = require('jsonwebtoken');  
+var cookieParser = require('cookie-parser');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -77,6 +79,9 @@ router.get('/login', function(req, res, next) {
   console.log(req.query.username);
   console.log(req.query.password);
   const db = dbConnection.db('BlogServer');
+  const minutesToAdjust = 120;
+  const millisecondsPerMinute = 60000;
+  const key = 'C-UFRaksvPKhx1txJYFcut3QGxsafPmwCY6SCly3G6c';
 
   const user = db.collection('Users').find({ username: req.query.username });
   var userArray = user.toArray().then(function(result) {
@@ -86,29 +91,42 @@ router.get('/login', function(req, res, next) {
       console.log("DB Password:" + result[0].password);
 
       let hash = result[0].password;
-      bcrypt.compare(req.query.password, hash, function(err, res) {
-        // res == true
-        if (res == true){
-          console.log("Passwords matched!");
+      bcrypt.compare(req.query.password, hash, function(err, res2) {
+        if (res2 == false ){
+          console.log("Passwords did not match.");
+          res.render('login', { title: 'Login', uname: req.query.username, pw: req.query.password });
         }
         else {
-          console.log("Passwords did not match.");
+          console.log("Passwords matched!");
+          
+          const payload = {
+            "exp": Math.floor(Date.now() / 1000) + (120 * 60),
+            "usr": req.query.username
+          };
+
+          var token = jwt.sign(payload, key);
+          console.log(token);
+          res.cookie('jwt', token);
+
+          // Redirection
+          if (!req.query.redirect){
+            res.redirect('/blog/' + req.query.username);
+          }
+          else {
+          res.redirect(req.query.redirect);
+          }
         }
       });
     }
     else {
       console.log("No user with that name found.")
+      res.render('login', { title: 'Login', uname: req.query.username, pw: req.query.password });
     }
   })
   .catch(function(err){
     console.log(err);
   });
 
-  
-  // // TODO: If Redirection provided
-  // if (req.query.username == 'username' && req.query.redirect){
-  //   res.redirect('/');
-  // }
 
   // // Replace this with correct DB checking of username and password
   // if (req.query.username == 'username' && req.query.password == 'password') {
@@ -117,7 +135,7 @@ router.get('/login', function(req, res, next) {
   
   
 
-  res.render('login', { title: 'Login', uname: req.query.username, pw: req.query.password });
+  // 
  
 });
 
