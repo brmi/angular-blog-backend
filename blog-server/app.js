@@ -68,6 +68,9 @@ mongoConnection = db.connectDB( function( err ) {
         for(i=0; i< result.length; i++){
           if(result[i].title && result[i].body && result[i].created && result[i].modified){
             response.push(result[i]);
+          } else {
+            res.status(404).send("One or more posts were corrupted");
+            return;
           }
         }
         if (response.length == 0){
@@ -93,16 +96,22 @@ mongoConnection = db.connectDB( function( err ) {
     const postsCollection = db.collection('Posts').find({ username: req.params.username, postid: parseInt(req.params.postid) });
     var postsArray = postsCollection.toArray().then(function(result) {
       
-      if(result.legnth == 0){
+      if(result.length !== 0){
         // post already exists
-        
         res.status(400).send();
+        console.log("post already exists");
+        return;
       } else {
         // post does not exist
 
+        if(!req.body.title && !req.body.body){
+          console.log("You must include title and body in a post body");
+          res.status(400).send();
+        }
+
         db.collection('Posts').insert({
-          postid: parseInt(req.body.postid),
-          username: req.body.username,
+          postid: parseInt(req.params.postid),
+          username: req.params.username,
           title: req.body.title,
           body: req.body.body,
           created: new Date().getTime(),
@@ -135,26 +144,61 @@ mongoConnection = db.connectDB( function( err ) {
     const postsCollection = db.collection('Posts').find({ username: req.params.username, postid: parseInt(req.params.postid) });
     var postsArray = postsCollection.toArray().then(function(result) {
       
-      if(result.legnth !== 0){
+      if(result.length !== 0){
         // post already exists
         if(!req.body.title && !req.body.body){
           console.log("no title or body");
           res.status(400).send();
+          return;
         }
 
-        db.collection('Posts').update({username: req.params.username, postid: parseInt(req.params.postid)}, {
+        db.collection('Posts').update({username: req.params.username, postid: parseInt(req.params.postid)}, {$set: {
           title: req.body.title,
           body: req.body.body,
           modified: new Date().getTime()
-        }, function(err, result){
-          if (err) {
-            console.log ("Error ", err);
-          } else {
-            console.log("Successfully inserted into posts database");
-          }
+        }}).then(function(result){
+          res.status(200).send();
+          return;
+        })
+        .catch(function(err){
+          console.log(err);
         });
 
-        res.status(200).send();
+      } else {
+        // post does not exist
+        console.log("post does not exist...");
+        res.status(400).send();
+      }
+        
+      })
+      .catch(function(err){
+        console.log(err);
+      });
+
+  });
+
+  app.delete('/api/:username/:postid', function(req, res, next){
+    
+    const db = dbConnection.db('BlogServer');
+    
+    //Load db & collections
+
+    
+    const postsCollection = db.collection('Posts').find({ username: req.params.username, postid: parseInt(req.params.postid) });
+    var postsArray = postsCollection.toArray().then(function(result) {
+      
+      if(result.length !== 0){
+        // post already exists
+        
+        db.collection('Posts').remove({username: req.params.username, postid: parseInt(req.params.postid)})
+          .then(function(result){
+            res.status(204).send();
+            return;
+        })
+        .catch(function(err){
+          console.log(err);
+        });
+
       } else {
         // post does not exist
         console.log("post does not exist...");
