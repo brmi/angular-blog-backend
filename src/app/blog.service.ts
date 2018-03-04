@@ -31,7 +31,7 @@ export class BlogService {
       }
     };
 
-   (function (posts) {
+   (async function (posts) {
       fetch(FETCH_URL, myOptions)
       .then(response => response.json())
       .then(json => {
@@ -42,6 +42,7 @@ export class BlogService {
         }
         });
     })(this.posts);
+    
   }
 
   getPosts(): Post[] {
@@ -50,11 +51,16 @@ export class BlogService {
   }
 
   getPost(id: number): Post{
+    console.log("get post with id: ", id);
     /* DONE: Find the post with postid=id from posts and return it */
     // let retrievedPost: Post = JSON.parse(localStorage.getItem(id.toString()));
+
+    // let found = this.posts.find(x => x.postid === id);
+
     var found = null;
     for (var i = 0; i < (this.posts).length; i++){
       var element = this.posts[i];
+      console.log("element: ", element);
 
       if (element.postid == id) {
         found = element;
