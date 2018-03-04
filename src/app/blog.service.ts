@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
+import * as jwt from 'jsonwebtoken';
 
 @Injectable()
 export class BlogService {
   private posts: Post[]= []; //memory cache of all blog posts
-
+  private username: String = "";
   constructor(private route: ActivatedRoute, private router: Router) {
     this.fetchPosts();
   }
@@ -16,23 +17,36 @@ export class BlogService {
       called inside the constructor so that all posts are retrieved 
       and be ready in memory when BlogService is created. 
     */
-
+    let key = 'C-UFRaksvPKhx1txJYFcut3QGxsafPmwCY6SCly3G6c';
     var cookie = document.cookie;
+    cookie = cookie.substr(4); // get rid of jwt= ......
     console.log("cookie", cookie);
-
-    const FETCH_URL = 'http://lvh.me:3000/api/cs144/';
+    this.username = jwt.decode(cookie).usr;
+    console.log("Token Username is:" + this.username);
+    
+    const FETCH_URL = 'http://lvh.me:3000/api/' + this.username;
 
     var myOptions = {
       method: 'GET',
       dataType: 'json',
+      credentials: 'same-origin',
       headers: {
         // 'Authorization': 'Bearer ' + accessToken,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        
       }
     };
 
    (function (posts) {
-      fetch(FETCH_URL, myOptions)
+      fetch(FETCH_URL,  {
+        method: 'GET',
+        // dataType: 'json',
+        credentials: 'same-origin',
+        headers: {
+          // 'Authorization': 'Bearer ' + accessToken,
+          'Content-Type': 'application/json',
+          
+        }})
       .then(response => response.json())
       .then(json => {
         console.log('response data: ', json)
@@ -40,8 +54,10 @@ export class BlogService {
           let currentPost = json[i];
           posts.push(currentPost);
         }
-        });
+        }).catch(error => console.error("!!! Error: ", error));
     })(this.posts);
+
+    console.log("In fetch posts");
   }
 
   getPosts(): Post[] {
@@ -106,19 +122,30 @@ export class BlogService {
 
     console.log("Just created new post: ", newPost, " current id is now:  ", maxID + 1);
 
-    const FETCH_URL = 'http://lvh.me:3000/api/cs144/' + newPost.postid;
+    const FETCH_URL = 'http://lvh.me:3000/api/'+ this.username + '/' + newPost.postid;
     var myOptions = {
       method: 'POST',
-      body: JSON.stringify({"titles": "default title", "body": "default body"}),
+      credentials: 'same-origin',
+      body: JSON.stringify({"title": "default title", "body": "default body"}),
       dataType: 'json',
       headers: {
         // 'Authorization': 'Bearer ' + accessToken,
+        
         'Content-Type': 'application/json'
       }
     };
 
    (function (postid, posts, router) {
-      fetch(FETCH_URL, myOptions)
+      fetch(FETCH_URL, {
+        method: 'POST',
+        credentials: 'same-origin',
+        body: JSON.stringify({"title": "default title", "body": "default body"}),
+        // dataType: 'json',
+        headers: {
+          // 'Authorization': 'Bearer ' + accessToken,
+          
+          'Content-Type': 'application/json'
+        }})
         .then(res => {
           res.json()
           console.log("response: " + res.status);
@@ -159,9 +186,10 @@ export class BlogService {
     was an error updating the post at the server, 
     and navigate to the "edit view" of the post.
     */
-   const FETCH_URL = 'http://lvh.me:3000/api/cs144/' + post.postid;
+   const FETCH_URL = 'http://lvh.me:3000/api/'+ this.username +'/' + post.postid;
    var myOptions = {
      method: 'PUT',
+    //  credentials: 'same-origin',
      body: JSON.stringify({"title": post.title, "body": post.body}),
      dataType: 'json',
      headers: {
@@ -171,7 +199,8 @@ export class BlogService {
    };
 
    (function (router, posts) {
-    fetch(FETCH_URL, myOptions)
+    fetch(FETCH_URL, 
+      myOptions)
      .then(function(res) {
        if (res.status != 200) {
          alert("Error: There was an error updating the post at the server!");
@@ -222,9 +251,10 @@ export class BlogService {
       return;
     }
 
-    const FETCH_URL = 'http://lvh.me:3000/api/cs144/' + postid;
+    const FETCH_URL = 'http://lvh.me:3000/api/'+ this.username + '/' + postid;
     var myOptions = {
       method: 'DELETE',
+      credentials: 'same-origin',
       headers: {
         // 'Authorization': 'Bearer ' + accessToken,
         
@@ -233,7 +263,13 @@ export class BlogService {
 
 
     (function (router) {
-    fetch(FETCH_URL, myOptions)
+    fetch(FETCH_URL, {
+      method: 'DELETE',
+      credentials: 'same-origin',
+      headers: {
+        // 'Authorization': 'Bearer ' + accessToken,
+        
+      }})
       .then(function(res) {
         if (res.status != 204) {
           alert("Error: There was an error deleting the post at the server!");
@@ -248,7 +284,7 @@ export class BlogService {
     })(this.router);
     let removeIndex = this.posts.map(function(item) { return (item.postid).toString(); }).indexOf(postid.toString());
     this.posts.splice(removeIndex, 1);
-
+  }
 }
 
 export class Post {

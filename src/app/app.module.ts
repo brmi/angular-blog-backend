@@ -8,6 +8,7 @@ import { BlogService } from './blog.service';
 import { EditComponent } from './edit/edit.component';
 import { ListComponent } from './list/list.component';
 import { PreviewComponent } from './preview/preview.component';
+import * as jwt from 'jsonwebtoken';
 
 import { ArraySortPipe } from './array.sort.pipe';
 const appRoutes: Routes = [

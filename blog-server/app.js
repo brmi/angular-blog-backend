@@ -78,6 +78,7 @@ mongoConnection = db.connectDB( function( err ) {
   // app.use('/api/:username', function(req, res, next) {
   //   let key = 'C-UFRaksvPKhx1txJYFcut3QGxsafPmwCY6SCly3G6c';
   //   console.log("BLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAH");
+  //   console.log("my cookies: " + req.cookies);
   //   var cookie = req.cookies['jwt'];
   //   if (!cookie) {
   //     console.log("Authentication error: No cookie");
