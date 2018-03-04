@@ -5,7 +5,6 @@ var db = require('../db');
 var bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');  
 var cookieParser = require('cookie-parser');
-// var dbConnection = MongoDB.getDB();
 
 mongoConnection = db.connectDB( function( err ) {
 

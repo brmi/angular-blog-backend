@@ -9,19 +9,27 @@ var jwt = require('jsonwebtoken');
 var express = require('express');
 var app = express();
 var routes = require('./routes/index');
-// const cors = require('cors')
 
-// const corsOptions = {
-//     origin: 'http://localhost:4200',
-//     credentials: true,
 
+//app.user(bodyParser.json());
+// after the code that uses bodyParser and other cool stuff
+// var originsWhitelist = [
+//   'http://localhost:4200',      //this is my front-end url for development
+//    'http://www.myproductionurl.com'
+// ];
+// var corsOptions = {
+//   origin: function(origin, callback){
+//         var isWhitelisted = originsWhitelist.indexOf(origin) !== -1;
+//         callback(null, isWhitelisted);
+//   },
+//   credentials:true
 // }
+// //here is the magic
 // app.use(cors(corsOptions));
 
 /* Connect to Mongo */ 
 mongoConnection = db.connectDB( function( err ) {
   var dbConnection = db.getDB();
-  console.log("db connection inside app.js", dbConnection);
   var index = require('./routes/index');
   var users = require('./routes/users');
 
@@ -43,10 +51,10 @@ mongoConnection = db.connectDB( function( err ) {
   app.use(routes);
 
   // app.use(function(req, res, next) {
-  //   res.header("Access-Control-Allow-Origin", "http://localhost:4200/");
-  //   res.header('Access-Control-Allow-Credentials', true);
-  //   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-  //   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  //   res.header("Access-Control-Allow-Origin", 'http://lvh.me:4200'); //<-- you can change this with a specific url like http://localhost:4200
+  //   res.header("Access-Control-Allow-Credentials", true);
+  //   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  //   res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
   //   next();
   // });
 
@@ -104,7 +112,7 @@ mongoConnection = db.connectDB( function( err ) {
         res.status(400).send();
         console.log(err);
       });
-
+      res.status(400).send();
   });
 
   app.get('/api/:username/:postid', function(req, res, next){

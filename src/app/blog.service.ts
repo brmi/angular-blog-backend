@@ -23,8 +23,11 @@ export class BlogService {
 
         function getXMLHttpRequest(method, url, async){
             var xmlHttpRequest = new XMLHttpRequest();
-            xmlHttpRequest.open(method, url, true);
+            xmlHttpRequest.open(method, url, async);
             // xmlHttpRequest.withCredentials = true;
+            xmlHttpRequest.setRequestHeader('Content-Type', 'application/json');
+            // xmlHttpRequest.setRequestHeader('Access-Control-Allow-Origin', 'http://lvh.me:3000');
+            // xmlHttpRequest.setRequestHeader('Access-Control-Allow-Methods', 'GET');
             xmlHttpRequest.setRequestHeader('Authorization', 'Bearer ' + jwtoken);
             xmlHttpRequest.onreadystatechange = function() {
                 if (xmlHttpRequest.readyState == XMLHttpRequest.DONE) {
@@ -36,7 +39,7 @@ export class BlogService {
         return getXMLHttpRequest;
     })(cookie);
 
-    var xmlHttpRequest = customXMLHttpRequest('get','http://localhost:3000/api/cs144',true);
+    var xmlHttpRequest = customXMLHttpRequest('GET','http://lvh.me:3000/api/cs144',true);
     xmlHttpRequest.send();
 
     for(var i =0; i < localStorage.length; i++){
