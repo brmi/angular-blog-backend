@@ -19,23 +19,6 @@ export class BlogService {
     var cookie = document.cookie;
     console.log("cookie", cookie);
 
-
-    // var xhr = new XMLHttpRequest();
-    // xhr.open('get', "http://lvh.me:3000/api/cs144", true);
-    // //xhr.withCredentials = true;
-    // xhr.onload = function (e) {
-    //   if (xhr.readyState === 4) {
-    //     if (xhr.status === 200) {
-    //       console.log(xhr.responseText);
-    //     } else {
-    //       console.error(xhr.statusText);
-    //     }
-    //   }
-    // };
-    // xhr.onerror = function (e) {
-    //   console.error(xhr.statusText);
-    // };
-    // xhr.send(null);
     var p: Post[] = [];
     var customXMLHttpRequest = (function (jwtoken) {
         function getXMLHttpRequest(method, url, async){
@@ -153,64 +136,6 @@ export class BlogService {
       .then(response => {
         console.log('Success: ', response);
       });
-
-    // var customXMLHttpRequest = (function (jwtoken) {
-    //   function getXMLHttpRequest(method, url, async){
-    //       var xmlHttpRequest = new XMLHttpRequest();
-    //       xmlHttpRequest.open(method, url, async);
-    //       xmlHttpRequest.setRequestHeader("Content-Type", "application/json");
-    //       // xmlHttpRequest.withCredentials = true;
-    //       // xmlHttpRequest.setRequestHeader('Authorization', 'Bearer ' + jwtoken);
-    //       // xmlHttpRequest.setRequestHeader('Access-Control-Allow-Origin', 'http://lvh.me:3000');
-    //       xmlHttpRequest.onerror = function onError(e){
-    //         console.log("Error", e);
-    //       }
-    //       xmlHttpRequest.onreadystatechange = function() {
-            
-    //           if (xmlHttpRequest.readyState == XMLHttpRequest.DONE) {
-    //               // alert(xmlHttpRequest.responseText);
-    //               console.log(this.responseText);
-    //           }
-    //       }
-    //       return xmlHttpRequest;
-    //   }
-    //   return getXMLHttpRequest;
-    // })(document.cookie);
-
-    // var url = 'http://lvh.me:3000/api/cs144/' + newPost.postid;
-    // var xmlHttpRequest = customXMLHttpRequest('post',url,true);
-    // xmlHttpRequest.send({"title": "title", "body": "body"});
-
-
-    // console.log("Posts: ", this.getPosts());
-
-
-    // var xhr = new XMLHttpRequest();
-    // xhr.open('post', "http://lvh.me:3000/api/cs144/" + newPost.postid, true);
-    // //xhr.withCredentials = true;
-    
-    
-    // xhr.onload = function (e) {
-    //   if (xhr.readyState === 4) {
-    //     if (xhr.status === 201) {
-    //       console.log(xhr.responseText);
-    //     } else {
-    //       console.error(xhr.statusText);
-    //       alert("TODO: delete post from posts");
-    //     }
-    //   }
-    // };
-    // xhr.onerror = function (e) {
-    //   console.error(xhr.statusText);
-    // };
-    // xhr.setRequestHeader("Content-Type", "application/json");
-    // xhr.send(JSON.stringify({title:"John Rambo", body:"2pm"}));
-
-
-    // let removeIndex = this.posts.map(function(item) { return (item.postid).toString(); }).indexOf(newPost.postid.toString());
-    // this.posts.splice(removeIndex, 1);
-    // console.log("Deleted?");
-    // console.log("new post:", this.posts);
     
     return newPost; 
   }
@@ -245,20 +170,44 @@ export class BlogService {
     corresponding post from localStorage. If no such post
     exists, do nothing.
     */
+   /*
+    From posts, find a post whose postid is the same as the passed in value, 
+    delete it from posts, and send a DELETE request to /api/:username/:postid 
+    (after setting up the response event handler). If no such post exists, do nothing.
 
-    let retrievedPost = JSON.parse(localStorage.getItem(postid.toString()));
-    if(retrievedPost){
-      // delete post from localStorage
-      localStorage.removeItem(postid.toString());
-      
-      // delete from local array
-      // get index of object with id:postid
-      let removeIndex = this.posts.map(function(item) { return (item.postid).toString(); }).indexOf(postid.toString());
-      this.posts.splice(removeIndex, 1);
+    The response event handler should do nothing if the response status code is "204 (No content)".
+    Otherwise, it should display an alert message saying that there was an error 
+    deleting the post at the server, and navigate to /, the "list pane" of the editor.
+   */
+
+    console.log("GONNA DELETE THIS POST: " + this.getPost(postid));
+    if (! this.getPost(postid)) {
+      return;
     }
 
-    
-    console.log("Deleted Post: ", retrievedPost.postid);
+    const FETCH_URL = 'http://lvh.me:3000/api/cs144/' + postid;
+    var myOptions = {
+      method: 'DELETE',
+      headers: {
+        // 'Authorization': 'Bearer ' + accessToken,
+        
+      }
+    };
+
+    fetch(FETCH_URL, myOptions)
+      .then(function(res) {
+        if (res.status != 204) {
+          alert("Error: There was an error deleting the post at the server!");
+          // TODO: Reroute to list?
+        }
+      })
+      .catch(error => console.error('Error:', error))
+      .then(response => {
+        console.log('Success: ', response);
+      });
+
+      let removeIndex = this.posts.map(function(item) { return (item.postid).toString(); }).indexOf(postid.toString());
+      this.posts.splice(removeIndex, 1);
   }
 
 }
