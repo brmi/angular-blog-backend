@@ -8,7 +8,6 @@ var bodyParser = require('body-parser');
 var jwt = require('jsonwebtoken');  
 var express = require('express');
 var app = express();
-var MongoDB = require('./db');
 var routes = require('./routes/index');
 // const cors = require('cors')
 
@@ -21,7 +20,8 @@ var routes = require('./routes/index');
 
 /* Connect to Mongo */ 
 mongoConnection = db.connectDB( function( err ) {
-  var dbConnection = MongoDB.getDB();
+  var dbConnection = db.getDB();
+  console.log("db connection inside app.js", dbConnection);
   var index = require('./routes/index');
   var users = require('./routes/users');
 
