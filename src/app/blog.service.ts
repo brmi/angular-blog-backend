@@ -246,11 +246,10 @@ export class BlogService {
       .catch(error => console.error("Error: There was an error deleting the post at the server!", error))
       .then(response => {
         console.log('Success: ', response);
-      });
-
-      let removeIndex = this.posts.map(function(item) { return (item.postid).toString(); }).indexOf(postid.toString());
-      this.posts.splice(removeIndex, 1);
-  })(this.router);
+      });      
+    })(this.router);
+    let removeIndex = this.posts.map(function(item) { return (item.postid).toString(); }).indexOf(postid.toString());
+    this.posts.splice(removeIndex, 1);
 
 }
 
