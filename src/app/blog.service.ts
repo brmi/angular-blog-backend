@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Promise } from 'q';
 
 @Injectable()
 export class BlogService {
@@ -31,7 +32,7 @@ export class BlogService {
       }
     };
 
-   (async function (posts) {
+   (function (posts) {
       fetch(FETCH_URL, myOptions)
       .then(response => response.json())
       .then(json => {
@@ -42,7 +43,6 @@ export class BlogService {
         }
         });
     })(this.posts);
-    
   }
 
   getPosts(): Post[] {
@@ -56,8 +56,11 @@ export class BlogService {
     // let retrievedPost: Post = JSON.parse(localStorage.getItem(id.toString()));
 
     // let found = this.posts.find(x => x.postid === id);
-
+    
+    console.log("fetched", (this.posts).length);
     var found = null;
+    //return some variables
+
     for (var i = 0; i < (this.posts).length; i++){
       var element = this.posts[i];
       console.log("element: ", element);
@@ -65,12 +68,13 @@ export class BlogService {
       if (element.postid == id) {
         found = element;
       }
+
+      // console.log("get post:" + found);
+
+      // returns null if post is not found
+      return found;
     }
-
-    console.log("get post:" + found);
-
-    // returns null if post is not found
-    return found; 
+    
   }
 
   newPost(): Post {
@@ -113,7 +117,7 @@ export class BlogService {
     const FETCH_URL = 'http://lvh.me:3000/api/cs144/' + newPost.postid;
     var myOptions = {
       method: 'POST',
-      body: JSON.stringify({"titles": "default title", "body": "default body"}),
+      body: JSON.stringify({"title": "default title", "body": "default body"}),
       dataType: 'json',
       headers: {
         // 'Authorization': 'Bearer ' + accessToken,
@@ -150,63 +154,20 @@ export class BlogService {
     values, change its modification time to now, and update
     the post in localStorage. If no such post exists, do nothing.
     */
-    /*
-    From posts, find a post whose postid is the same as post.postid,
-    update its title and body with the passed-in values, 
-    change its modification time to now, 
-    and send a PUT request to /api/:username/:postid 
-    (after setting up the response event handler). 
-    If no such post exists, do nothing.
-
-    The response event handler should do nothing if the response status code is "200 (OK)".
-    Otherwise, it should display an alert message saying that there 
-    was an error updating the post at the server, 
-    and navigate to the "edit view" of the post.
-    */
-   const FETCH_URL = 'http://lvh.me:3000/api/cs144/' + post.postid;
-   var myOptions = {
-     method: 'PUT',
-     body: JSON.stringify({"title": post.title, "body": post.body}),
-     dataType: 'json',
-     headers: {
-       // 'Authorization': 'Bearer ' + accessToken,
-       
-     }
-   };
-
-   (function (router) {
-    fetch(FETCH_URL, myOptions)
-     .then(function(res) {
-       if (res.status != 200) {
-         alert("Error: There was an error updating the post at the server!");
-         // TODO: Reroute to edit
-        //  redirect: window.location.replace("../Sample/home.html") 
-        console.log("Did i rerwdwwoute?");
-        // this.router.navigateByUrl('/');
-        router.navigate(['/edit', post.postid]);
-        // router.navigate(['/']);
-         console.log("Did i reroute?");
-       }
-       else {
-         // update post in local array
-          let localPost = this.posts.find(x => x.postid === post.postid);
-          localPost.title = post.title;
-          localPost.body = post.body;
-          localPost.modified = new Date();
-
-          this.router.navigateByUrl('/??nadiw');
-       }
-     })
-     .catch(error => console.error("!!! Error: ", error))
-     .then(response => {
-       console.log('Success: ', response);
-     });
-   })(this.router);
-   
-
+    let currentTime = new Date();
+    let retrievedPost = JSON.parse(localStorage.getItem(post.postid.toString()));
+    retrievedPost.title = post.title;
+    retrievedPost.body = post.body;
+    retrievedPost.modified = currentTime;
     
-    
+    // update post in localStorage
+    localStorage.setItem(retrievedPost.postid.toString(), JSON.stringify(retrievedPost));
 
+    // update post in local array
+    let localPost = this.posts.find(x => x.postid === post.postid);
+    localPost.title = post.title;
+    localPost.body = post.body;
+    localPost.modified = post.modified;
   }
 
   deletePost(postid: number): void {
@@ -226,6 +187,7 @@ export class BlogService {
     deleting the post at the server, and navigate to /, the "list pane" of the editor.
    */
 
+    console.log("GONNA DELETE THIS POST: " + this.getPost(postid));
     if (! this.getPost(postid)) {
       return;
     }
@@ -239,23 +201,21 @@ export class BlogService {
       }
     };
 
-
-    (function (router) {
     fetch(FETCH_URL, myOptions)
       .then(function(res) {
         if (res.status != 204) {
           alert("Error: There was an error deleting the post at the server!");
           // TODO: Reroute to list?
-          this.router.navigate(['/']);
         }
       })
-      .catch(error => console.error("Error: There was an error deleting the post at the server!", error))
+      .catch(error => console.error('Error:', error))
       .then(response => {
         console.log('Success: ', response);
-      });      
-    })(this.router);
-    let removeIndex = this.posts.map(function(item) { return (item.postid).toString(); }).indexOf(postid.toString());
-    this.posts.splice(removeIndex, 1);
+      });
+
+      let removeIndex = this.posts.map(function(item) { return (item.postid).toString(); }).indexOf(postid.toString());
+      this.posts.splice(removeIndex, 1);
+  }
 
 }
 
