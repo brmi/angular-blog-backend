@@ -91,7 +91,6 @@ export class BlogService {
       if (element.postid == id) {
         found = element;
       }
-
     }
 
     console.log("get post:" + found);
@@ -140,7 +139,7 @@ export class BlogService {
     const FETCH_URL = 'http://lvh.me:3000/api/cs144/' + newPost.postid;
     var myOptions = {
       method: 'POST',
-      body: JSON.stringify({"title": "title", "body": "body"}),
+      body: JSON.stringify({"title": "default title", "body": "default body"}),
       dataType: 'json',
       headers: {
         // 'Authorization': 'Bearer ' + accessToken,
