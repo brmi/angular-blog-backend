@@ -172,24 +172,24 @@ mongoConnection = db.connectDB( function( err ) {
     const db = dbConnection.db('BlogServer');
     
     //Load db & collections
-
+    console.log("inside post api");
     
     const postsCollection = db.collection('Posts').find({ username: req.params.username, postid: parseInt(req.params.postid) });
     var postsArray = postsCollection.toArray().then(function(result) {
       
+      if(!req.body.title || !req.body.body){
+        console.log("You must include title and body in a post body");
+        res.status(400).send({'responseMessage': 'You must include title and body in a post body'});
+      } else {
+        console.log("title is: ", req.body.title, " body is: ", req.body.body);
+      }
+
       if(result.length !== 0){
         // post already exists
         console.log("post already exists: ", result[0].postid, result[0].title, result[0].body);
-        res.status(400).send();
+        res.status(400).send({'responseMessage': 'post already exists'});
       } else {
         // post does not exist
-        console.log("title is: ", req.body.title, " body is: ", req.body.body);
-        if(!req.body.title && !req.body.body){
-          console.log("You must include title and body in a post body");
-          res.status(400).send();
-        } else {
-          console.log("title is: ", req.body.title, " body is: ", req.body.body);
-        }
 
         db.collection('Posts').insert({
           postid: parseInt(req.params.postid),
@@ -203,7 +203,7 @@ mongoConnection = db.connectDB( function( err ) {
             console.log ("Error ", err);
           } else {
             console.log("Successfully inserted into posts database");
-            res.status(201).send();
+            res.status(201).send({'responseMessage': 'successfully inserted into posts database'});
           }
         });
       }

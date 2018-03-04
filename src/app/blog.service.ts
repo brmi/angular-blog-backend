@@ -123,7 +123,7 @@ export class BlogService {
     const FETCH_URL = 'http://lvh.me:3000/api/cs144/' + newPost.postid;
     var myOptions = {
       method: 'POST',
-      body: JSON.stringify({"title": "default title", "body": "default body"}),
+      body: JSON.stringify({"titles": "default title", "body": "default body"}),
       dataType: 'json',
       headers: {
         // 'Authorization': 'Bearer ' + accessToken,
@@ -131,12 +131,24 @@ export class BlogService {
       }
     };
 
-    fetch(FETCH_URL, myOptions)
-      .then(res => res.json())
-      .catch(error => console.error('Error:', error))
-      .then(response => {
-        console.log('Success: ', response);
-      });
+   (function (postid, posts, router) {
+      fetch(FETCH_URL, myOptions)
+        .then(res => {
+          res.json()
+          console.log("response: " + res.status);
+          if(res.status == 400){
+            console.log("deleted post");
+            alert("Error creating post at the server");
+            let removeIndex = posts.map(function(item) { return (item.postid).toString(); }).indexOf(postid.toString());
+            posts.splice(removeIndex, 1);
+            router.navigate(['/']);
+          }
+        })
+        .catch(error => console.error('Error:', error))
+        .then(response => {
+          console.log('Success: ', response);
+        });
+    })(newPost.postid, this.posts, this.router);
     
     return newPost; 
   }
