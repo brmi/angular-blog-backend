@@ -46,12 +46,14 @@ export class BlogService {
 
   getPosts(): Post[] {
     /* DONE: This method simply returns posts */
+    console.log("In get posts");
     return this.posts;
   }
 
   getPost(id: number): Post{
     /* DONE: Find the post with postid=id from posts and return it */
     // let retrievedPost: Post = JSON.parse(localStorage.getItem(id.toString()));
+    console.log("IM IN GET POSTTTTTTT");
     var found = null;
     for (var i = 0; i < (this.posts).length; i++){
       var element = this.posts[i];
@@ -164,11 +166,11 @@ export class BlogService {
      dataType: 'json',
      headers: {
        // 'Authorization': 'Bearer ' + accessToken,
-       
+       'Content-Type': 'application/json' 
      }
    };
 
-   (function (router) {
+   (function (router, posts) {
     fetch(FETCH_URL, myOptions)
      .then(function(res) {
        if (res.status != 200) {
@@ -183,22 +185,18 @@ export class BlogService {
        }
        else {
          // update post in local array
-          let localPost = this.posts.find(x => x.postid === post.postid);
+          let localPost = posts.find(x => x.postid === post.postid);
           localPost.title = post.title;
           localPost.body = post.body;
           localPost.modified = new Date();
-
-          this.router.navigateByUrl('/??nadiw');
        }
      })
      .catch(error => console.error("!!! Error: ", error))
      .then(response => {
        console.log('Success: ', response);
      });
-   })(this.router);
-   
-
-    
+   })(this.router, this.posts);
+  
     
 
   }
