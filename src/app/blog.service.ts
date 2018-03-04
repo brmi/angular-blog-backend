@@ -19,19 +19,44 @@ export class BlogService {
     var cookie = document.cookie;
     console.log("cookie", cookie);
 
-    var customXMLHttpRequest = (function (jwtoken) {
 
+    // var xhr = new XMLHttpRequest();
+    // xhr.open('get', "http://lvh.me:3000/api/cs144", true);
+    // //xhr.withCredentials = true;
+    // xhr.onload = function (e) {
+    //   if (xhr.readyState === 4) {
+    //     if (xhr.status === 200) {
+    //       console.log(xhr.responseText);
+    //     } else {
+    //       console.error(xhr.statusText);
+    //     }
+    //   }
+    // };
+    // xhr.onerror = function (e) {
+    //   console.error(xhr.statusText);
+    // };
+    // xhr.send(null);
+    var p: Post[] = [];
+    var customXMLHttpRequest = (function (jwtoken) {
         function getXMLHttpRequest(method, url, async){
             var xmlHttpRequest = new XMLHttpRequest();
             xmlHttpRequest.open(method, url, async);
             // xmlHttpRequest.withCredentials = true;
-            xmlHttpRequest.setRequestHeader('Content-Type', 'application/json');
+            // xmlHttpRequest.setRequestHeader('Authorization', 'Bearer ' + jwtoken);
             // xmlHttpRequest.setRequestHeader('Access-Control-Allow-Origin', 'http://lvh.me:3000');
-            // xmlHttpRequest.setRequestHeader('Access-Control-Allow-Methods', 'GET');
-            xmlHttpRequest.setRequestHeader('Authorization', 'Bearer ' + jwtoken);
             xmlHttpRequest.onreadystatechange = function() {
+              
                 if (xmlHttpRequest.readyState == XMLHttpRequest.DONE) {
-                    alert(xmlHttpRequest.responseText);
+                    // alert(xmlHttpRequest.responseText);
+                    var arr = JSON.parse(this.responseText);
+                    for(var i =0; i < arr.length; i++){
+                      // let currentPost = JSON.parse(arr.getItem(arr.key(i)));
+                      let currentPost = arr[i];
+                      // console.log("fetch posts current post from local storage: ", currentPost);
+                      p.push(currentPost);
+                    }
+                
+                    console.log("this.posts after: ", p);
                 }
             }
             return xmlHttpRequest;
@@ -39,16 +64,13 @@ export class BlogService {
         return getXMLHttpRequest;
     })(cookie);
 
-    var xmlHttpRequest = customXMLHttpRequest('GET','http://lvh.me:3000/api/cs144',true);
+    var xmlHttpRequest = customXMLHttpRequest('get','http://lvh.me:3000/api/cs144',true);
     xmlHttpRequest.send();
 
-    for(var i =0; i < localStorage.length; i++){
-      let currentPost = JSON.parse(localStorage.getItem(localStorage.key(i)));
-      // console.log("fetch posts current post from local storage: ", currentPost);
-      this.posts.push(currentPost);
-    }
+    //TODO: assign this.posts somehow during the xhr callback
+    this.posts = p;
 
-    // console.log("this.posts after Fetch Post: ", this.posts);
+    console.log("this.posts after Fetch Post: ", this.posts);
   }
 
   getPosts(): Post[] {
@@ -93,14 +115,59 @@ export class BlogService {
     newPost.body='default body';
 
     // save to localStorage
-    console.log("saving to local storage: ", newPost.postid.toString());
-    localStorage.setItem(newPost.postid.toString(), JSON.stringify(newPost));
+    // console.log("saving to local storage: ", newPost.postid.toString());
+    // localStorage.setItem(newPost.postid.toString(), JSON.stringify(newPost));
     
     // Add to posts
     console.log("push post: ", this.posts.push(newPost));
 
     console.log("Just created new post: ", newPost, " current id is now:  ", maxID + 1);
     // console.log("Posts: ", this.getPosts());
+
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('post', "http://lvh.me:3000/api/cs144/" + newPost.postid, true);
+    //xhr.withCredentials = true;
+    
+    
+    xhr.onload = function (e) {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 201) {
+          console.log(xhr.responseText);
+        } else {
+          console.error(xhr.statusText);
+          alert("TODO: delete post from posts");
+        }
+      }
+    };
+    xhr.onerror = function (e) {
+      console.error(xhr.statusText);
+    };
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send(JSON.stringify({title:"John Rambo", body:"2pm"}));
+
+
+    let removeIndex = this.posts.map(function(item) { return (item.postid).toString(); }).indexOf(newPost.postid.toString());
+    this.posts.splice(removeIndex, 1);
+    console.log("Deleted?");
+    console.log(this.posts);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     return newPost; 
   }
 

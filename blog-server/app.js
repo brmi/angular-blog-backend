@@ -48,13 +48,21 @@ mongoConnection = db.connectDB( function( err ) {
   app.use('/', index);
   app.use('/users', users);
 
-  app.use(routes);
+  // app.use(routes);
 
   // app.use(function(req, res, next) {
+<<<<<<< HEAD
   //   res.header("Access-Control-Allow-Origin", 'http://lvh.me:4200'); //<-- you can change this with a specific url like http://localhost:4200
   //   res.header("Access-Control-Allow-Credentials", true);
   //   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
   //   res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
+=======
+  //   console.log("??????????????????????????????????????????????");
+  //   res.header("Access-Control-Allow-Origin", "http://lvh.me:4200/");
+  //   res.header('Access-Control-Allow-Credentials', true);
+  //   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  //   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+>>>>>>> b85a011fa73371ca6d96835bd485ba00d941259d
   //   next();
   // });
 
@@ -73,6 +81,7 @@ mongoConnection = db.connectDB( function( err ) {
   //         console.log(decoded.usr);
   //         if (decoded.usr != req.params.username){
   //           // bad
+  //           res.status(401);
   //           console.log("Authentication error: cookie and login do not match. Attempt to access: " + req.params.username + ", but token is: " + decoded.usr);
   //           res.render('login', { title: 'Login', uname: req.params.username });
   //         }
@@ -85,6 +94,7 @@ mongoConnection = db.connectDB( function( err ) {
   //       else { 
   //         // Invalid token
   //         console.log("Authentication error: invalid token, " + cookie);
+  //         res.status(403);
   //         res.render('login', { title: 'Login', uname: req.params.username });
   //       }
   //     });
