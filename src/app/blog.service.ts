@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 
 @Injectable()
 export class BlogService {
   private posts: Post[]= []; //memory cache of all blog posts
 
-  constructor() {
+  constructor(private route: ActivatedRoute, private router: Router) {
     this.fetchPosts();
   }
 
@@ -139,7 +140,7 @@ export class BlogService {
     const FETCH_URL = 'http://lvh.me:3000/api/cs144/' + newPost.postid;
     var myOptions = {
       method: 'POST',
-      body: JSON.stringify({"title": "default title", "body": "default body"}),
+      body: JSON.stringify({"titles": "default title", "body": "default body"}),
       dataType: 'json',
       headers: {
         // 'Authorization': 'Bearer ' + accessToken,
@@ -147,70 +148,24 @@ export class BlogService {
       }
     };
 
-    fetch(FETCH_URL, myOptions)
-      .then(res => res.json())
-      .catch(error => console.error('Error:', error))
-      .then(response => {
-        console.log('Success: ', response);
-      });
-
-    // var customXMLHttpRequest = (function (jwtoken) {
-    //   function getXMLHttpRequest(method, url, async){
-    //       var xmlHttpRequest = new XMLHttpRequest();
-    //       xmlHttpRequest.open(method, url, async);
-    //       xmlHttpRequest.setRequestHeader("Content-Type", "application/json");
-    //       // xmlHttpRequest.withCredentials = true;
-    //       // xmlHttpRequest.setRequestHeader('Authorization', 'Bearer ' + jwtoken);
-    //       // xmlHttpRequest.setRequestHeader('Access-Control-Allow-Origin', 'http://lvh.me:3000');
-    //       xmlHttpRequest.onerror = function onError(e){
-    //         console.log("Error", e);
-    //       }
-    //       xmlHttpRequest.onreadystatechange = function() {
-            
-    //           if (xmlHttpRequest.readyState == XMLHttpRequest.DONE) {
-    //               // alert(xmlHttpRequest.responseText);
-    //               console.log(this.responseText);
-    //           }
-    //       }
-    //       return xmlHttpRequest;
-    //   }
-    //   return getXMLHttpRequest;
-    // })(document.cookie);
-
-    // var url = 'http://lvh.me:3000/api/cs144/' + newPost.postid;
-    // var xmlHttpRequest = customXMLHttpRequest('post',url,true);
-    // xmlHttpRequest.send({"title": "title", "body": "body"});
-
-
-    // console.log("Posts: ", this.getPosts());
-
-
-    // var xhr = new XMLHttpRequest();
-    // xhr.open('post', "http://lvh.me:3000/api/cs144/" + newPost.postid, true);
-    // //xhr.withCredentials = true;
-    
-    
-    // xhr.onload = function (e) {
-    //   if (xhr.readyState === 4) {
-    //     if (xhr.status === 201) {
-    //       console.log(xhr.responseText);
-    //     } else {
-    //       console.error(xhr.statusText);
-    //       alert("TODO: delete post from posts");
-    //     }
-    //   }
-    // };
-    // xhr.onerror = function (e) {
-    //   console.error(xhr.statusText);
-    // };
-    // xhr.setRequestHeader("Content-Type", "application/json");
-    // xhr.send(JSON.stringify({title:"John Rambo", body:"2pm"}));
-
-
-    // let removeIndex = this.posts.map(function(item) { return (item.postid).toString(); }).indexOf(newPost.postid.toString());
-    // this.posts.splice(removeIndex, 1);
-    // console.log("Deleted?");
-    // console.log("new post:", this.posts);
+   (function (postid, posts, router) {
+      fetch(FETCH_URL, myOptions)
+        .then(res => {
+          res.json()
+          console.log("response: " + res.status);
+          if(res.status == 400){
+            console.log("deleted post");
+            alert("Error creating post at the server");
+            let removeIndex = posts.map(function(item) { return (item.postid).toString(); }).indexOf(postid.toString());
+            posts.splice(removeIndex, 1);
+            router.navigate(['/']);
+          }
+        })
+        .catch(error => console.error('Error:', error))
+        .then(response => {
+          console.log('Success: ', response);
+        });
+    })(newPost.postid, this.posts, this.router);
     
     return newPost; 
   }
