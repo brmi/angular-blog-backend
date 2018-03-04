@@ -20,44 +20,28 @@ export class BlogService {
     var cookie = document.cookie;
     console.log("cookie", cookie);
 
-    var p: Post[] = [];
-    var customXMLHttpRequest = (function (jwtoken) {
-        function getXMLHttpRequest(method, url, async){
-            var xmlHttpRequest = new XMLHttpRequest();
-            xmlHttpRequest.open(method, url, async);
-            // xmlHttpRequest.withCredentials = true;
-            // xmlHttpRequest.setRequestHeader('Authorization', 'Bearer ' + jwtoken);
-            // xmlHttpRequest.setRequestHeader('Access-Control-Allow-Origin', 'http://lvh.me:3000');
-            xmlHttpRequest.onerror = function onError(e){
-              console.log("Error", e);
-            }
-            xmlHttpRequest.onreadystatechange = function() {
-              
-                if (xmlHttpRequest.readyState == XMLHttpRequest.DONE) {
-                    // alert(xmlHttpRequest.responseText);
-                    var arr = JSON.parse(this.responseText);
-                    for(var i =0; i < arr.length; i++){
-                      // let currentPost = JSON.parse(arr.getItem(arr.key(i)));
-                      let currentPost = arr[i];
-                      // console.log("fetch posts current post from local storage: ", currentPost);
-                      p.push(currentPost);
-                    }
-                
-                    console.log("this.posts after: ", p);
-                }
-            }
-            return xmlHttpRequest;
+    const FETCH_URL = 'http://lvh.me:3000/api/cs144/';
+
+    var myOptions = {
+      method: 'GET',
+      dataType: 'json',
+      headers: {
+        // 'Authorization': 'Bearer ' + accessToken,
+        'Content-Type': 'application/json'
+      }
+    };
+
+   (function (posts) {
+      fetch(FETCH_URL, myOptions)
+      .then(response => response.json())
+      .then(json => {
+        console.log('response data: ', json)
+        for(var i =0; i < json.length; i++){
+          let currentPost = json[i];
+          posts.push(currentPost);
         }
-        return getXMLHttpRequest;
-    })(cookie);
-
-    var xmlHttpRequest = customXMLHttpRequest('get','http://lvh.me:3000/api/cs144',true);
-    xmlHttpRequest.send();
-
-    //TODO: assign this.posts somehow during the xhr callback
-    this.posts = p;
-
-    console.log("this.posts after Fetch Post: ", this.posts);
+        });
+    })(this.posts);
   }
 
   getPosts(): Post[] {
