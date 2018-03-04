@@ -20,11 +20,11 @@ export class BlogService {
     let key = 'C-UFRaksvPKhx1txJYFcut3QGxsafPmwCY6SCly3G6c';
     var cookie = document.cookie;
     cookie = cookie.substr(4); // get rid of jwt= ......
-    console.log("cookie", cookie);
+    console.log("cookie is", cookie);
     this.username = jwt.decode(cookie).usr;
     console.log("Token Username is:" + this.username);
     
-    const FETCH_URL = 'http://lvh.me:3000/api/' + this.username;
+    const FETCH_URL = 'http://localhost:3000/api/' + this.username;
 
     var myOptions = {
       method: 'GET',
@@ -40,14 +40,16 @@ export class BlogService {
    (function (posts) {
       fetch(FETCH_URL,  {
         method: 'GET',
-        // dataType: 'json',
         credentials: 'same-origin',
         headers: {
           // 'Authorization': 'Bearer ' + accessToken,
           'Content-Type': 'application/json',
           
         }})
-      .then(response => response.json())
+      .then(response => {
+        console.log('response: ', response);
+        return response.json();
+      })
       .then(json => {
         console.log('response data: ', json)
         for(var i =0; i < json.length; i++){
@@ -56,6 +58,8 @@ export class BlogService {
         }
         }).catch(error => console.error("!!! Error: ", error));
     })(this.posts);
+
+    console.log("fetched posts: ", this.posts);
 
     console.log("In fetch posts");
   }

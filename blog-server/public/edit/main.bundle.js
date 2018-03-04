@@ -223,10 +223,10 @@ var BlogService = /** @class */ (function () {
         var key = 'C-UFRaksvPKhx1txJYFcut3QGxsafPmwCY6SCly3G6c';
         var cookie = document.cookie;
         cookie = cookie.substr(4); // get rid of jwt= ......
-        console.log("cookie", cookie);
+        console.log("cookie is", cookie);
         this.username = __WEBPACK_IMPORTED_MODULE_2_jsonwebtoken__["decode"](cookie).usr;
         console.log("Token Username is:" + this.username);
-        var FETCH_URL = 'http://lvh.me:3000/api/' + this.username;
+        var FETCH_URL = 'http://localhost:3000/api/' + this.username;
         var myOptions = {
             method: 'GET',
             dataType: 'json',
@@ -239,14 +239,16 @@ var BlogService = /** @class */ (function () {
         (function (posts) {
             fetch(FETCH_URL, {
                 method: 'GET',
-                // dataType: 'json',
                 credentials: 'same-origin',
                 headers: {
                     // 'Authorization': 'Bearer ' + accessToken,
                     'Content-Type': 'application/json',
                 }
             })
-                .then(function (response) { return response.json(); })
+                .then(function (response) {
+                console.log('response: ', response);
+                return response.json();
+            })
                 .then(function (json) {
                 console.log('response data: ', json);
                 for (var i = 0; i < json.length; i++) {
@@ -255,6 +257,7 @@ var BlogService = /** @class */ (function () {
                 }
             }).catch(function (error) { return console.error("!!! Error: ", error); });
         })(this.posts);
+        console.log("fetched posts: ", this.posts);
         console.log("In fetch posts");
     };
     BlogService.prototype.getPosts = function () {
