@@ -44,6 +44,9 @@ export class BlogService {
             // xmlHttpRequest.withCredentials = true;
             // xmlHttpRequest.setRequestHeader('Authorization', 'Bearer ' + jwtoken);
             // xmlHttpRequest.setRequestHeader('Access-Control-Allow-Origin', 'http://lvh.me:3000');
+            xmlHttpRequest.onerror = function onError(e){
+              console.log("Error", e);
+            }
             xmlHttpRequest.onreadystatechange = function() {
               
                 if (xmlHttpRequest.readyState == XMLHttpRequest.DONE) {
@@ -80,10 +83,21 @@ export class BlogService {
 
   getPost(id: number): Post{
     /* DONE: Find the post with postid=id from posts and return it */
-    let retrievedPost: Post = JSON.parse(localStorage.getItem(id.toString()));
+    // let retrievedPost: Post = JSON.parse(localStorage.getItem(id.toString()));
+    var found = null;
+    for (var i = 0; i < (this.posts).length; i++){
+      var element = this.posts[i];
+
+      if (element.postid == id) {
+        found = element;
+      }
+
+    }
+
+    console.log("get post:" + found);
 
     // returns null if post is not found
-    return retrievedPost; 
+    return found; 
   }
 
   newPost(): Post {
@@ -122,52 +136,83 @@ export class BlogService {
     console.log("push post: ", this.posts.push(newPost));
 
     console.log("Just created new post: ", newPost, " current id is now:  ", maxID + 1);
+
+    const FETCH_URL = 'http://lvh.me:3000/api/cs144/' + newPost.postid;
+    var myOptions = {
+      method: 'POST',
+      body: JSON.stringify({"title": "title", "body": "body"}),
+      dataType: 'json',
+      headers: {
+        // 'Authorization': 'Bearer ' + accessToken,
+        'Content-Type': 'application/json'
+      }
+    };
+
+    fetch(FETCH_URL, myOptions)
+      .then(res => res.json())
+      .catch(error => console.error('Error:', error))
+      .then(response => {
+        console.log('Success: ', response);
+      });
+
+    // var customXMLHttpRequest = (function (jwtoken) {
+    //   function getXMLHttpRequest(method, url, async){
+    //       var xmlHttpRequest = new XMLHttpRequest();
+    //       xmlHttpRequest.open(method, url, async);
+    //       xmlHttpRequest.setRequestHeader("Content-Type", "application/json");
+    //       // xmlHttpRequest.withCredentials = true;
+    //       // xmlHttpRequest.setRequestHeader('Authorization', 'Bearer ' + jwtoken);
+    //       // xmlHttpRequest.setRequestHeader('Access-Control-Allow-Origin', 'http://lvh.me:3000');
+    //       xmlHttpRequest.onerror = function onError(e){
+    //         console.log("Error", e);
+    //       }
+    //       xmlHttpRequest.onreadystatechange = function() {
+            
+    //           if (xmlHttpRequest.readyState == XMLHttpRequest.DONE) {
+    //               // alert(xmlHttpRequest.responseText);
+    //               console.log(this.responseText);
+    //           }
+    //       }
+    //       return xmlHttpRequest;
+    //   }
+    //   return getXMLHttpRequest;
+    // })(document.cookie);
+
+    // var url = 'http://lvh.me:3000/api/cs144/' + newPost.postid;
+    // var xmlHttpRequest = customXMLHttpRequest('post',url,true);
+    // xmlHttpRequest.send({"title": "title", "body": "body"});
+
+
     // console.log("Posts: ", this.getPosts());
 
 
-    var xhr = new XMLHttpRequest();
-    xhr.open('post', "http://lvh.me:3000/api/cs144/" + newPost.postid, true);
-    //xhr.withCredentials = true;
+    // var xhr = new XMLHttpRequest();
+    // xhr.open('post', "http://lvh.me:3000/api/cs144/" + newPost.postid, true);
+    // //xhr.withCredentials = true;
     
     
-    xhr.onload = function (e) {
-      if (xhr.readyState === 4) {
-        if (xhr.status === 201) {
-          console.log(xhr.responseText);
-        } else {
-          console.error(xhr.statusText);
-          alert("TODO: delete post from posts");
-        }
-      }
-    };
-    xhr.onerror = function (e) {
-      console.error(xhr.statusText);
-    };
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.send(JSON.stringify({title:"John Rambo", body:"2pm"}));
+    // xhr.onload = function (e) {
+    //   if (xhr.readyState === 4) {
+    //     if (xhr.status === 201) {
+    //       console.log(xhr.responseText);
+    //     } else {
+    //       console.error(xhr.statusText);
+    //       alert("TODO: delete post from posts");
+    //     }
+    //   }
+    // };
+    // xhr.onerror = function (e) {
+    //   console.error(xhr.statusText);
+    // };
+    // xhr.setRequestHeader("Content-Type", "application/json");
+    // xhr.send(JSON.stringify({title:"John Rambo", body:"2pm"}));
 
 
-    let removeIndex = this.posts.map(function(item) { return (item.postid).toString(); }).indexOf(newPost.postid.toString());
-    this.posts.splice(removeIndex, 1);
-    console.log("Deleted?");
-    console.log(this.posts);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    // let removeIndex = this.posts.map(function(item) { return (item.postid).toString(); }).indexOf(newPost.postid.toString());
+    // this.posts.splice(removeIndex, 1);
+    // console.log("Deleted?");
+    // console.log("new post:", this.posts);
+    
     return newPost; 
   }
 

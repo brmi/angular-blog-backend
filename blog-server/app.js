@@ -48,21 +48,30 @@ mongoConnection = db.connectDB( function( err ) {
   app.use('/', index);
   app.use('/users', users);
 
-  // app.use(routes);
+  app.use(routes);
+
+  app.use(function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+
+    //intercepts OPTIONS method
+    if ('OPTIONS' === req.method) {
+      //respond with 200
+      res.send(200);
+    }
+    else {
+    //move on
+      next();
+      }
+  });
 
   // app.use(function(req, res, next) {
-<<<<<<< HEAD
-  //   res.header("Access-Control-Allow-Origin", 'http://lvh.me:4200'); //<-- you can change this with a specific url like http://localhost:4200
-  //   res.header("Access-Control-Allow-Credentials", true);
-  //   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-  //   res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
-=======
   //   console.log("??????????????????????????????????????????????");
   //   res.header("Access-Control-Allow-Origin", "http://lvh.me:4200/");
   //   res.header('Access-Control-Allow-Credentials', true);
   //   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
   //   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
->>>>>>> b85a011fa73371ca6d96835bd485ba00d941259d
   //   next();
   // });
 
@@ -108,7 +117,7 @@ mongoConnection = db.connectDB( function( err ) {
     //Load db & collections
     const postsCollection = db.collection('Posts').find({ username: req.params.username });
     var postsArray = postsCollection.toArray().then(function(result) {
-      console.log(result);
+      // console.log(result);
         // check that each post has five fields: postid, title, body, created, and modified
         response = [];
         for(i=0; i< result.length; i++){
@@ -116,13 +125,14 @@ mongoConnection = db.connectDB( function( err ) {
             response.push(result[i]);
           }
         }
+        console.log("response: ", response);
         res.status(200).send(response);
+        // return;
         })
       .catch(function(err){
         res.status(400).send();
         console.log(err);
-      });
-      res.status(400).send();
+      });      
   });
 
   app.get('/api/:username/:postid', function(req, res, next){
@@ -169,15 +179,16 @@ mongoConnection = db.connectDB( function( err ) {
       
       if(result.length !== 0){
         // post already exists
+        console.log("post already exists: ", result[0].postid, result[0].title, result[0].body);
         res.status(400).send();
-        console.log("post already exists");
-        return;
       } else {
         // post does not exist
-
+        console.log("title is: ", req.body.title, " body is: ", req.body.body);
         if(!req.body.title && !req.body.body){
           console.log("You must include title and body in a post body");
           res.status(400).send();
+        } else {
+          console.log("title is: ", req.body.title, " body is: ", req.body.body);
         }
 
         db.collection('Posts').insert({
@@ -192,15 +203,14 @@ mongoConnection = db.connectDB( function( err ) {
             console.log ("Error ", err);
           } else {
             console.log("Successfully inserted into posts database");
+            res.status(201).send();
           }
         });
-
-        res.status(201).send();
       }
         
       })
       .catch(function(err){
-        console.log(err);
+        console.log("Error: ", err);
       });
 
   });
