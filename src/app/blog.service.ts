@@ -1,10 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-<<<<<<< HEAD
-import { Promise } from 'q';
-=======
 import * as jwt from 'jsonwebtoken';
->>>>>>> 764360584b76b0eb39489ab1b3c933d52dff9c19
 
 @Injectable()
 export class BlogService {
@@ -74,14 +70,7 @@ export class BlogService {
     console.log("get post with id: ", id);
     /* DONE: Find the post with postid=id from posts and return it */
     // let retrievedPost: Post = JSON.parse(localStorage.getItem(id.toString()));
-<<<<<<< HEAD
-
-    // let found = this.posts.find(x => x.postid === id);
-    
-    console.log("fetched", (this.posts).length);
-=======
     console.log("IM IN GET POSTTTTTTT");
->>>>>>> 764360584b76b0eb39489ab1b3c933d52dff9c19
     var found = null;
     //return some variables
 
@@ -141,10 +130,7 @@ export class BlogService {
     const FETCH_URL = 'http://lvh.me:3000/api/'+ this.username + '/' + newPost.postid;
     var myOptions = {
       method: 'POST',
-<<<<<<< HEAD
-=======
       credentials: 'same-origin',
->>>>>>> 764360584b76b0eb39489ab1b3c933d52dff9c19
       body: JSON.stringify({"title": "default title", "body": "default body"}),
       dataType: 'json',
       headers: {
@@ -192,22 +178,6 @@ export class BlogService {
     values, change its modification time to now, and update
     the post in localStorage. If no such post exists, do nothing.
     */
-<<<<<<< HEAD
-    let currentTime = new Date();
-    let retrievedPost = JSON.parse(localStorage.getItem(post.postid.toString()));
-    retrievedPost.title = post.title;
-    retrievedPost.body = post.body;
-    retrievedPost.modified = currentTime;
-    
-    // update post in localStorage
-    localStorage.setItem(retrievedPost.postid.toString(), JSON.stringify(retrievedPost));
-
-    // update post in local array
-    let localPost = this.posts.find(x => x.postid === post.postid);
-    localPost.title = post.title;
-    localPost.body = post.body;
-    localPost.modified = post.modified;
-=======
     /*
     From posts, find a post whose postid is the same as post.postid,
     update its title and body with the passed-in values, 
@@ -263,7 +233,6 @@ export class BlogService {
   
     
 
->>>>>>> 764360584b76b0eb39489ab1b3c933d52dff9c19
   }
 
   deletePost(postid: number): void {
@@ -298,9 +267,6 @@ export class BlogService {
       }
     };
 
-<<<<<<< HEAD
-    fetch(FETCH_URL, myOptions)
-=======
 
     (function (router) {
     fetch(FETCH_URL, {
@@ -310,7 +276,6 @@ export class BlogService {
         // 'Authorization': 'Bearer ' + accessToken,
         
       }})
->>>>>>> 764360584b76b0eb39489ab1b3c933d52dff9c19
       .then(function(res) {
         if (res.status != 204) {
           alert("Error: There was an error deleting the post at the server!");
@@ -320,20 +285,11 @@ export class BlogService {
       .catch(error => console.error('Error:', error))
       .then(response => {
         console.log('Success: ', response);
-<<<<<<< HEAD
-      });
-
-      let removeIndex = this.posts.map(function(item) { return (item.postid).toString(); }).indexOf(postid.toString());
-      this.posts.splice(removeIndex, 1);
-  }
-
-=======
       });      
     })(this.router);
     let removeIndex = this.posts.map(function(item) { return (item.postid).toString(); }).indexOf(postid.toString());
     this.posts.splice(removeIndex, 1);
   }
->>>>>>> 764360584b76b0eb39489ab1b3c933d52dff9c19
 }
 
 export class Post {

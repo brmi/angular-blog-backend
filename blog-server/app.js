@@ -75,41 +75,41 @@ mongoConnection = db.connectDB( function( err ) {
   //   next();
   // });
 
-  // app.use('/api/:username', function(req, res, next) {
-  //   let key = 'C-UFRaksvPKhx1txJYFcut3QGxsafPmwCY6SCly3G6c';
-  //   console.log("BLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAH");
-  //   console.log("my cookies: " + req.cookies);
-  //   var cookie = req.cookies['jwt'];
-  //   if (!cookie) {
-  //     console.log("Authentication error: No cookie");
-  //     res.render('login', { title: 'Login', uname: req.params.username });
-  //   }
-  //   else {
-  //     jwt.verify(req.cookies['jwt'], key, function(err, decoded) {
-  //       if (decoded) {
-  //         console.log(decoded);
-  //         console.log(decoded.usr);
-  //         if (decoded.usr != req.params.username){
-  //           // bad
-  //           res.status(401);
-  //           console.log("Authentication error: cookie and login do not match. Attempt to access: " + req.params.username + ", but token is: " + decoded.usr);
-  //           res.render('login', { title: 'Login', uname: req.params.username });
-  //         }
-  //         else {
-  //           // good
-  //           console.log("Successful authentication!");
-  //           next();
-  //         }
-  //       }
-  //       else { 
-  //         // Invalid token
-  //         console.log("Authentication error: invalid token, " + cookie);
-  //         res.status(403);
-  //         res.render('login', { title: 'Login', uname: req.params.username });
-  //       }
-  //     });
-  //   }
-  // });
+  app.use('/api/:username', function(req, res, next) {
+    let key = 'C-UFRaksvPKhx1txJYFcut3QGxsafPmwCY6SCly3G6c';
+    console.log("BLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAH");
+    console.log("my cookies: " + req.cookies);
+    var cookie = req.cookies['jwt'];
+    if (!cookie) {
+      console.log("Authentication error: No cookie");
+      res.render('login', { title: 'Login', uname: req.params.username });
+    }
+    else {
+      jwt.verify(req.cookies['jwt'], key, function(err, decoded) {
+        if (decoded) {
+          console.log(decoded);
+          console.log(decoded.usr);
+          if (decoded.usr != req.params.username){
+            // bad
+            res.status(401);
+            console.log("Authentication error: cookie and login do not match. Attempt to access: " + req.params.username + ", but token is: " + decoded.usr);
+            res.render('login', { title: 'Login', uname: req.params.username });
+          }
+          else {
+            // good
+            console.log("Successful authentication!");
+            next();
+          }
+        }
+        else { 
+          // Invalid token
+          console.log("Authentication error: invalid token, " + cookie);
+          res.status(403);
+          res.render('login', { title: 'Login', uname: req.params.username });
+        }
+      });
+    }
+  });
 
   app.get('/api/:username', function(req, res, next){
     

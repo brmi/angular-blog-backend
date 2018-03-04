@@ -34,6 +34,7 @@ mongoConnection = db.connectDB( function( err ) {
       var writer = new commonmarkLibrary.HtmlRenderer();
       
       var count = 1;
+      
       for(i=0; i< result.length; i++){
         var parsedTitle = reader.parse(result[i].title);
         result[i].title = writer.render(parsedTitle);
