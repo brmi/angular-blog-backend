@@ -74,27 +74,6 @@ export class BlogService {
     /* DONE: Find the post with postid=id from posts and return it */
     // let retrievedPost: Post = JSON.parse(localStorage.getItem(id.toString()));
     
-    // var found = null;
-    // //return some variables
-
-    // for (var i = 0; i < (this.posts).length; i++){
-    //   var element = this.posts[i];
-
-    //   if (element.postid == id) {
-    //     found = element;
-    //     console.log("INSIDE getPost() in blogservice: numbers match. found element = ", found);
-    //   } else if ((element.postid).toString() == id.toString()){
-    //     console.log("INSIDE getPost() in blogservice: strings match");
-    //     found = element;
-    //     found.postid = id;
-    //   }
-
-    //   // console.log("get post:" + found);
-
-    //   // returns null if post is not found
-    //   return found;
-    // }
-
     let localPost = this.posts.find(x => x.postid === id) || null;
     if(!localPost){
       localPost = this.posts.find(x => x.postid.toString() === id.toString());
@@ -187,12 +166,6 @@ export class BlogService {
 
   updatePost(post: Post): void {
     console.log("INSIDE updatePost()");
-    /* DONE
-    From posts, find a post whose postid is the same as 
-    post.postid, update its title and body with the passed-in
-    values, change its modification time to now, and update
-    the post in localStorage. If no such post exists, do nothing.
-    */
     /*
     From posts, find a post whose postid is the same as post.postid,
     update its title and body with the passed-in values, 
@@ -258,12 +231,6 @@ export class BlogService {
   }
 
   deletePost(postid: number): void {
-    /* DONE
-    From posts, find a post whose postid is the same as
-    post.postid, delete it from posts, and delete a 
-    corresponding post from localStorage. If no such post
-    exists, do nothing.
-    */
    /*
     From posts, find a post whose postid is the same as the passed in value, 
     delete it from posts, and send a DELETE request to /api/:username/:postid 
