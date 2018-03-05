@@ -109,7 +109,7 @@ mongoConnection = db.connectDB( function( err ) {
         else { 
           // Invalid token
           console.log("Authentication error: invalid token, " + cookie);
-          res.status(403);
+          res.status(401);
           res.render('login', { title: 'Login', uname: req.params.username });
         }
       });
