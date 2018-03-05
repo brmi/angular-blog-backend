@@ -59,13 +59,10 @@ export class BlogService {
         console.log("fetched posts: ", posts);
         }).catch(error => console.error("!!! Error: ", error));
     })(this.posts);
-
-    console.log("INSIDE fetchPosts()");
   }
 
   getPosts(): Post[] {
     /* DONE: This method simply returns posts */
-    console.log("INSIDE getPosts()");
     return this.posts;
   }
 
@@ -79,9 +76,7 @@ export class BlogService {
     if(!localPost){
       localPost = this.posts.find(x => x.postid.toString() === id.toString());
     }
-    console.log("INSIDE getPost()... fetching id", id, ' this.posts = ', this.posts, '\n FOUND: ', localPost);
     return localPost;
-    
   }
 
   newPost(): Post {
@@ -166,7 +161,6 @@ export class BlogService {
   }
 
   updatePost(post: Post): void {
-    console.log("INSIDE updatePost()");
     /*
     From posts, find a post whose postid is the same as post.postid,
     update its title and body with the passed-in values, 
@@ -206,12 +200,7 @@ export class BlogService {
        if (res.status != 200) {
          alert("Error: There was an error updating the post at the server!");
          // TODO: Reroute to edit
-        //  redirect: window.location.replace("../Sample/home.html") 
-        console.log("Did i rerwdwwoute?");
-        // this.router.navigateByUrl('/');
         router.navigate(['/edit', post.postid]);
-        // router.navigate(['/']);
-         console.log("Did i reroute?");
        }
        else {
          // update post in local array
@@ -241,8 +230,6 @@ export class BlogService {
     Otherwise, it should display an alert message saying that there was an error 
     deleting the post at the server, and navigate to /, the "list pane" of the editor.
    */
-
-    console.log("GONNA DELETE THIS POST: " + this.getPost(postid));
     if (! this.getPost(postid)) {
       return;
     }
