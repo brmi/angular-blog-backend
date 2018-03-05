@@ -131,7 +131,7 @@ export class BlogService {
 
     console.log("Just created new post: ", newPost, " current id is now:  ", maxID + 1);
 
-    const FETCH_URL = 'http://lvh.me:3000/api/'+ this.username + '/' + newPost.postid;
+    const FETCH_URL = 'http://localhost:3000/api/'+ this.username + '/' + newPost.postid;
     var myOptions = {
       method: 'POST',
       credentials: 'same-origin',
@@ -195,7 +195,7 @@ export class BlogService {
     was an error updating the post at the server, 
     and navigate to the "edit view" of the post.
     */
-   const FETCH_URL = 'http://lvh.me:3000/api/'+ this.username +'/' + post.postid;
+   const FETCH_URL = 'http://localhost:3000/api/'+ this.username +'/' + post.postid;
    var myOptions = {
      method: 'PUT',
     //  credentials: 'same-origin',
@@ -261,7 +261,7 @@ export class BlogService {
       return;
     }
 
-    const FETCH_URL = 'http://lvh.me:3000/api/'+ this.username + '/' + postid;
+    const FETCH_URL = 'http://localhost:3000/api/'+ this.username + '/' + postid;
     var myOptions = {
       method: 'DELETE',
       credentials: 'same-origin',
