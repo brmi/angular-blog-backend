@@ -230,11 +230,11 @@ export class BlogService {
     Otherwise, it should display an alert message saying that there was an error 
     deleting the post at the server, and navigate to /, the "list pane" of the editor.
    */
-    if (! this.getPost(postid)) {
-      return;
-    }
-
-    const FETCH_URL = 'http://localhost:3000/api/'+ this.username + '/' + postid;
+    // if (! this.getPost(postid)) {
+    //   return;
+    // }
+    console.log("going to delete: ", postid);
+    const FETCH_URL = 'http://localhost:3000/api/'+ this.username + '/' + String(postid);
     var myOptions = {
       method: 'DELETE',
       credentials: 'same-origin',

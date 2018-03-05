@@ -31,13 +31,9 @@ export class EditComponent implements OnInit {
 
   ngOnInit() {
     // when component is initialized
-    // this.currentPostid= this.route.snapshot.params['id'];
-    // this.post = this.blogService.getPost(this.currentPostid);
-
       this.route.params.subscribe(
         (params: Params) => {
-          // this.post.postid = parseInt(params['id']);
-          // this.currentPostid = parseInt(params['id']);
+          this.currentPostid = parseInt(params['id']);
           this.post = this.blogService.getPost(parseInt(params['id']));
         }
       );

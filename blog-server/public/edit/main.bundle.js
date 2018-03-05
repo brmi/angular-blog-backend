@@ -406,10 +406,11 @@ var BlogService = /** @class */ (function () {
          Otherwise, it should display an alert message saying that there was an error
          deleting the post at the server, and navigate to /, the "list pane" of the editor.
         */
-        if (!this.getPost(postid)) {
-            return;
-        }
-        var FETCH_URL = 'http://localhost:3000/api/' + this.username + '/' + postid;
+        // if (! this.getPost(postid)) {
+        //   return;
+        // }
+        console.log("going to delete: ", postid);
+        var FETCH_URL = 'http://localhost:3000/api/' + this.username + '/' + String(postid);
         var myOptions = {
             method: 'DELETE',
             credentials: 'same-origin',
@@ -514,13 +515,10 @@ var EditComponent = /** @class */ (function () {
         }
     }
     EditComponent.prototype.ngOnInit = function () {
-        // when component is initialized
-        // this.currentPostid= this.route.snapshot.params['id'];
-        // this.post = this.blogService.getPost(this.currentPostid);
         var _this = this;
+        // when component is initialized
         this.route.params.subscribe(function (params) {
-            // this.post.postid = parseInt(params['id']);
-            // this.currentPostid = parseInt(params['id']);
+            _this.currentPostid = parseInt(params['id']);
             _this.post = _this.blogService.getPost(parseInt(params['id']));
         });
     };
