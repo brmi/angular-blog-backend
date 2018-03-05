@@ -558,8 +558,8 @@ var EditComponent = /** @class */ (function () {
         // this.post = this.blogService.getPost(this.currentPostid);
         var _this = this;
         this.route.params.subscribe(function (params) {
-            _this.post.postid = parseInt(params['id']);
-            _this.currentPostid = parseInt(params['id']);
+            // this.post.postid = parseInt(params['id']);
+            // this.currentPostid = parseInt(params['id']);
             _this.post = _this.blogService.getPost(parseInt(params['id']));
         });
         console.log("INSIDE ngOnInit() of edit component: this.post = ", this.post);
