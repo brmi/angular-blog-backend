@@ -20,7 +20,7 @@ export class EditComponent implements OnInit {
 
   constructor(private blogService: BlogService,
     private route: ActivatedRoute, private router: Router) {
-    this.currentPostid= parseInt(this.route.snapshot.params['id']);
+    this.currentPostid= this.route.snapshot.params['id'];
     console.log('inside edit componenet: currentPostID', this.currentPostid);
     this.post = this.blogService.getPost(this.currentPostid);
 
@@ -39,12 +39,12 @@ export class EditComponent implements OnInit {
 
       this.route.params.subscribe(
         (params: Params) => {
-          this.post.postid = params['id'];
-          this.currentPostid = params['id'];
+          this.post.postid = parseInt(params['id']);
+          this.currentPostid = parseInt(params['id']);
           this.post = this.blogService.getPost(parseInt(params['id']));
         }
       );
-      console.log("INSIDE ngOnInit() of edit component: this.posts = ", this.post);
+      console.log("INSIDE ngOnInit() of edit component: this.post = ", this.post);
 
   }
 
@@ -92,7 +92,7 @@ export class EditComponent implements OnInit {
 
   getPost(): void {
     console.log("INSIDE getPost() of edit component")
-    const currentPostid =+ parseInt(this.route.snapshot.paramMap.get('id'));
+    const currentPostid = +this.route.snapshot.paramMap.get('id');
   }
 
 }

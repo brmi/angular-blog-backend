@@ -268,24 +268,25 @@ var BlogService = /** @class */ (function () {
     BlogService.prototype.getPost = function (id) {
         /* DONE: Find the post with postid=id from posts and return it */
         // let retrievedPost: Post = JSON.parse(localStorage.getItem(id.toString()));
-        console.log("INSIDE getPost()... fetching id", id, ' this.posts = ', this.getPosts());
-        var found = null;
-        //return some variables
-        for (var i = 0; i < (this.posts).length; i++) {
-            var element = this.posts[i];
-            if (element.postid == id) {
-                found = element;
-                console.log("INSIDE getPost() in blogservice: numbers match. found element = ", found);
-            }
-            else if ((element.postid).toString() == id.toString()) {
-                console.log("INSIDE getPost() in blogservice: strings match");
-                found = element;
-                found.postid = id;
-            }
-            // console.log("get post:" + found);
-            // returns null if post is not found
-            return found;
-        }
+        // var found = null;
+        // //return some variables
+        // for (var i = 0; i < (this.posts).length; i++){
+        //   var element = this.posts[i];
+        //   if (element.postid == id) {
+        //     found = element;
+        //     console.log("INSIDE getPost() in blogservice: numbers match. found element = ", found);
+        //   } else if ((element.postid).toString() == id.toString()){
+        //     console.log("INSIDE getPost() in blogservice: strings match");
+        //     found = element;
+        //     found.postid = id;
+        //   }
+        //   // console.log("get post:" + found);
+        //   // returns null if post is not found
+        //   return found;
+        // }
+        var localPost = this.posts.find(function (x) { return x.postid === id; }) || null;
+        console.log("INSIDE getPost()... fetching id", id, ' this.posts = ', this.posts, '\n FOUND: ', localPost);
+        return localPost;
     };
     BlogService.prototype.newPost = function () {
         /* DONE
@@ -539,7 +540,7 @@ var EditComponent = /** @class */ (function () {
         this.disableSave = true;
         this.savedPost = false;
         this.deletedPost = false;
-        this.currentPostid = parseInt(this.route.snapshot.params['id']);
+        this.currentPostid = this.route.snapshot.params['id'];
         console.log('inside edit componenet: currentPostID', this.currentPostid);
         this.post = this.blogService.getPost(this.currentPostid);
         console.log('inside edit component: fetched post is: ', this.post);
@@ -554,11 +555,11 @@ var EditComponent = /** @class */ (function () {
         // this.post = this.blogService.getPost(this.currentPostid);
         var _this = this;
         this.route.params.subscribe(function (params) {
-            _this.post.postid = params['id'];
-            _this.currentPostid = params['id'];
+            _this.post.postid = parseInt(params['id']);
+            _this.currentPostid = parseInt(params['id']);
             _this.post = _this.blogService.getPost(parseInt(params['id']));
         });
-        console.log("INSIDE ngOnInit() of edit component: this.posts = ", this.post);
+        console.log("INSIDE ngOnInit() of edit component: this.post = ", this.post);
     };
     EditComponent.prototype.tempSave = function () {
         console.log("INSIDE tempSave() of edit component");
@@ -596,7 +597,7 @@ var EditComponent = /** @class */ (function () {
     };
     EditComponent.prototype.getPost = function () {
         console.log("INSIDE getPost() of edit component");
-        var currentPostid = +parseInt(this.route.snapshot.paramMap.get('id'));
+        var currentPostid = +this.route.snapshot.paramMap.get('id');
     };
     EditComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({

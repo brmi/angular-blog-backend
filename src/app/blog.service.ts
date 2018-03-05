@@ -73,27 +73,31 @@ export class BlogService {
   
     /* DONE: Find the post with postid=id from posts and return it */
     // let retrievedPost: Post = JSON.parse(localStorage.getItem(id.toString()));
-    console.log("INSIDE getPost()... fetching id", id, ' this.posts = ', this.getPosts());
-    var found = null;
-    //return some variables
+    
+    // var found = null;
+    // //return some variables
 
-    for (var i = 0; i < (this.posts).length; i++){
-      var element = this.posts[i];
-      
-      if (element.postid == id) {
-        found = element;
-        console.log("INSIDE getPost() in blogservice: numbers match. found element = ", found);
-      } else if ((element.postid).toString() == id.toString()){
-        console.log("INSIDE getPost() in blogservice: strings match");
-        found = element;
-        found.postid = id;
-      }
+    // for (var i = 0; i < (this.posts).length; i++){
+    //   var element = this.posts[i];
 
-      // console.log("get post:" + found);
+    //   if (element.postid == id) {
+    //     found = element;
+    //     console.log("INSIDE getPost() in blogservice: numbers match. found element = ", found);
+    //   } else if ((element.postid).toString() == id.toString()){
+    //     console.log("INSIDE getPost() in blogservice: strings match");
+    //     found = element;
+    //     found.postid = id;
+    //   }
 
-      // returns null if post is not found
-      return found;
-    }
+    //   // console.log("get post:" + found);
+
+    //   // returns null if post is not found
+    //   return found;
+    // }
+
+    let localPost = this.posts.find(x => x.postid === id) || null;
+    console.log("INSIDE getPost()... fetching id", id, ' this.posts = ', this.posts, '\n FOUND: ', localPost);
+    return localPost;
     
   }
 
