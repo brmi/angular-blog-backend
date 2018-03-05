@@ -21,11 +21,8 @@ export class EditComponent implements OnInit {
   constructor(private blogService: BlogService,
     private route: ActivatedRoute, private router: Router) {
     this.currentPostid= parseInt(this.route.snapshot.params['id']);
-    console.log('inside edit componenet: currentPostID', this.currentPostid, ' type of postid is', typeof this.currentPostid);
     this.post = this.blogService.getPost(this.currentPostid);
 
-    console.log('inside edit component: fetched post is: ', this.post, ' type of postid is', typeof this.post.postid);
-    
     if(!this.post){
       console.log("invalid postid");
       this.router.navigate(['/']);
@@ -44,12 +41,9 @@ export class EditComponent implements OnInit {
           this.post = this.blogService.getPost(parseInt(params['id']));
         }
       );
-      console.log("INSIDE ngOnInit() of edit component: this.post = ", this.post, ' type of postid is', typeof this.post.postid);
-
   }
 
   tempSave() {
-    console.log("INSIDE tempSave() of edit component");
     this.blogService.updatePost(this.post);
     let tempPost: Post =  this.blogService.getPost(this.currentPostid);
     this.savedPost = true;
@@ -61,20 +55,17 @@ export class EditComponent implements OnInit {
     let tempPost: Post =  this.blogService.getPost(this.currentPostid);
     this.post.modified = tempPost.modified;
     this.savedPost = true;
-    console.log("INSIDE onSave() in edit component");
     this.blogService.getPosts();
     // this.router.navigate(['/edit', this.currentPostid]);
     this.disableSave = true;
   }
 
   onDelete() {
-    console.log("INSIDE onDelete() of edit component")
     // post disappear from list pane
     this.blogService.deletePost(this.currentPostid);
     this.deletedPost = true;
     this.blogService.getPosts();
-    this.router.navigate(['/']);
-    
+    this.router.navigate(['/']); 
   }
 
   allowSave() {
@@ -83,15 +74,12 @@ export class EditComponent implements OnInit {
   }
 
   onLoadPreview() {
-    
     // make sure to save data
     this.onSave();
-
     this.router.navigate(['preview', this.currentPostid]);
   }
 
   getPost(): void {
-    console.log("INSIDE getPost() of edit component")
     const currentPostid = +this.route.snapshot.paramMap.get('id');
   }
 

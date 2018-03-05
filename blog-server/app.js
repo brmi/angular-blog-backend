@@ -9,7 +9,7 @@ var jwt = require('jsonwebtoken');
 var express = require('express');
 var app = express();
 var routes = require('./routes/index');
-
+var key = 'C-UFRaksvPKhx1txJYFcut3QGxsafPmwCY6SCly3G6c';
 
 //app.user(bodyParser.json());
 // after the code that uses bodyParser and other cool stuff
@@ -43,6 +43,20 @@ mongoConnection = db.connectDB( function( err ) {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(cookieParser());
+
+  app.use('/edit', function(req, res, next) {
+    var cookie = req.cookies['jwt'];
+    jwt.verify(req.cookies['jwt'], key, function(err, decoded) {
+     if (err){
+       res.redirect('/login?redirect=/edit/');
+     }
+     else {
+       res.locals.username = decoded.usr;
+       next();
+     }
+    });
+   });
+
   app.use(express.static(path.join(__dirname, 'public')));
 
   app.use('/', index);
@@ -66,17 +80,8 @@ mongoConnection = db.connectDB( function( err ) {
       }
   });
 
-  // app.use(function(req, res, next) {
-  //   console.log("??????????????????????????????????????????????");
-  //   res.header("Access-Control-Allow-Origin", "http://lvh.me:4200/");
-  //   res.header('Access-Control-Allow-Credentials', true);
-  //   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-  //   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  //   next();
-  // });
 
   app.use('/api/:username', function(req, res, next) {
-    let key = 'C-UFRaksvPKhx1txJYFcut3QGxsafPmwCY6SCly3G6c';
     console.log("BLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAH");
     console.log("my cookies: " + req.cookies);
     var cookie = req.cookies['jwt'];
@@ -104,7 +109,7 @@ mongoConnection = db.connectDB( function( err ) {
         else { 
           // Invalid token
           console.log("Authentication error: invalid token, " + cookie);
-          res.status(403);
+          res.status(401);
           res.render('login', { title: 'Login', uname: req.params.username });
         }
       });

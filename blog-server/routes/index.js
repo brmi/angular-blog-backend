@@ -12,7 +12,7 @@ mongoConnection = db.connectDB( function( err ) {
 
   /* GET home page. */
   router.get('/', function(req, res, next) {
-    res.render('index', { title: 'Express' });
+    res.redirect('/edit');
   });
 
 
@@ -97,6 +97,9 @@ mongoConnection = db.connectDB( function( err ) {
   router.get('/login', function(req, res, next) {
     console.log("login username: ", req.query.username);
     console.log("login password: ", req.query.password);
+    console.log("login redirect: " , req.query.redirect);
+    console.log("login redirect p? : ", req.params.redirect);
+    
     const db = dbConnection.db('BlogServer');
     const minutesToAdjust = 120;
     const millisecondsPerMinute = 60000;
@@ -124,9 +127,13 @@ mongoConnection = db.connectDB( function( err ) {
 
             // Redirection
             if (!req.query.redirect){
-              res.redirect('/blog/' + req.query.username);
+              console.log("No redirection provided");
+              res.locals.username = req.query.username;
+              res.locals.password = req.query.password;
+              res.redirect('/edit/');
             }
             else {
+              console.log("Redirecting....");
             res.redirect(req.query.redirect);
             }
           }

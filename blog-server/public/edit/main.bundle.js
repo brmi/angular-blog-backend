@@ -211,6 +211,7 @@ var BlogService = /** @class */ (function () {
         this.router = router;
         this.posts = []; //memory cache of all blog posts
         this.username = "";
+        this.key = 'C-UFRaksvPKhx1txJYFcut3QGxsafPmwCY6SCly3G6c';
         this.fetchPosts();
     }
     BlogService.prototype.fetchPosts = function () {
@@ -220,7 +221,6 @@ var BlogService = /** @class */ (function () {
           called inside the constructor so that all posts are retrieved
           and be ready in memory when BlogService is created.
         */
-        var key = 'C-UFRaksvPKhx1txJYFcut3QGxsafPmwCY6SCly3G6c';
         var cookie = document.cookie;
         cookie = cookie.substr(4); // get rid of jwt= ......
         console.log("cookie is", cookie);
@@ -258,37 +258,18 @@ var BlogService = /** @class */ (function () {
                 console.log("fetched posts: ", posts);
             }).catch(function (error) { return console.error("!!! Error: ", error); });
         })(this.posts);
-        console.log("INSIDE fetchPosts()");
     };
     BlogService.prototype.getPosts = function () {
         /* DONE: This method simply returns posts */
-        console.log("INSIDE getPosts()");
         return this.posts;
     };
     BlogService.prototype.getPost = function (id) {
         /* DONE: Find the post with postid=id from posts and return it */
         // let retrievedPost: Post = JSON.parse(localStorage.getItem(id.toString()));
-        // var found = null;
-        // //return some variables
-        // for (var i = 0; i < (this.posts).length; i++){
-        //   var element = this.posts[i];
-        //   if (element.postid == id) {
-        //     found = element;
-        //     console.log("INSIDE getPost() in blogservice: numbers match. found element = ", found);
-        //   } else if ((element.postid).toString() == id.toString()){
-        //     console.log("INSIDE getPost() in blogservice: strings match");
-        //     found = element;
-        //     found.postid = id;
-        //   }
-        //   // console.log("get post:" + found);
-        //   // returns null if post is not found
-        //   return found;
-        // }
         var localPost = this.posts.find(function (x) { return x.postid === id; }) || null;
         if (!localPost) {
             localPost = this.posts.find(function (x) { return x.postid.toString() === id.toString(); });
         }
-        console.log("INSIDE getPost()... fetching id", id, ' this.posts = ', this.posts, '\n FOUND: ', localPost);
         return localPost;
     };
     BlogService.prototype.newPost = function () {
@@ -345,7 +326,7 @@ var BlogService = /** @class */ (function () {
                 .then(function (res) {
                 res.json();
                 console.log("response: " + res.status);
-                if (res.status == 400) {
+                if (res.status != 201) {
                     console.log("deleted post");
                     alert("Error creating post at the server");
                     var removeIndex = posts.map(function (item) { return (item.postid).toString(); }).indexOf(postid.toString());
@@ -361,13 +342,6 @@ var BlogService = /** @class */ (function () {
         return newPost;
     };
     BlogService.prototype.updatePost = function (post) {
-        console.log("INSIDE updatePost()");
-        /* DONE
-        From posts, find a post whose postid is the same as
-        post.postid, update its title and body with the passed-in
-        values, change its modification time to now, and update
-        the post in localStorage. If no such post exists, do nothing.
-        */
         /*
         From posts, find a post whose postid is the same as post.postid,
         update its title and body with the passed-in values,
@@ -406,12 +380,7 @@ var BlogService = /** @class */ (function () {
                 if (res.status != 200) {
                     alert("Error: There was an error updating the post at the server!");
                     // TODO: Reroute to edit
-                    //  redirect: window.location.replace("../Sample/home.html") 
-                    console.log("Did i rerwdwwoute?");
-                    // this.router.navigateByUrl('/');
                     router.navigate(['/edit', post.postid]);
-                    // router.navigate(['/']);
-                    console.log("Did i reroute?");
                 }
                 else {
                     // update post in local array
@@ -428,12 +397,6 @@ var BlogService = /** @class */ (function () {
         })(this.router, this.posts);
     };
     BlogService.prototype.deletePost = function (postid) {
-        /* DONE
-        From posts, find a post whose postid is the same as
-        post.postid, delete it from posts, and delete a
-        corresponding post from localStorage. If no such post
-        exists, do nothing.
-        */
         /*
          From posts, find a post whose postid is the same as the passed in value,
          delete it from posts, and send a DELETE request to /api/:username/:postid
@@ -443,7 +406,6 @@ var BlogService = /** @class */ (function () {
          Otherwise, it should display an alert message saying that there was an error
          deleting the post at the server, and navigate to /, the "list pane" of the editor.
         */
-        console.log("GONNA DELETE THIS POST: " + this.getPost(postid));
         if (!this.getPost(postid)) {
             return;
         }
@@ -463,6 +425,7 @@ var BlogService = /** @class */ (function () {
                 if (res.status != 204) {
                     alert("Error: There was an error deleting the post at the server!");
                     // TODO: Reroute to list?
+                    router.navigate(['/']);
                 }
             })
                 .catch(function (error) { return console.error('Error:', error); })
@@ -544,9 +507,7 @@ var EditComponent = /** @class */ (function () {
         this.savedPost = false;
         this.deletedPost = false;
         this.currentPostid = parseInt(this.route.snapshot.params['id']);
-        console.log('inside edit componenet: currentPostID', this.currentPostid, ' type of postid is', typeof this.currentPostid);
         this.post = this.blogService.getPost(this.currentPostid);
-        console.log('inside edit component: fetched post is: ', this.post, ' type of postid is', typeof this.post.postid);
         if (!this.post) {
             console.log("invalid postid");
             this.router.navigate(['/']);
@@ -562,10 +523,8 @@ var EditComponent = /** @class */ (function () {
             // this.currentPostid = parseInt(params['id']);
             _this.post = _this.blogService.getPost(parseInt(params['id']));
         });
-        console.log("INSIDE ngOnInit() of edit component: this.post = ", this.post, ' type of postid is', typeof this.post.postid);
     };
     EditComponent.prototype.tempSave = function () {
-        console.log("INSIDE tempSave() of edit component");
         this.blogService.updatePost(this.post);
         var tempPost = this.blogService.getPost(this.currentPostid);
         this.savedPost = true;
@@ -576,13 +535,11 @@ var EditComponent = /** @class */ (function () {
         var tempPost = this.blogService.getPost(this.currentPostid);
         this.post.modified = tempPost.modified;
         this.savedPost = true;
-        console.log("INSIDE onSave() in edit component");
         this.blogService.getPosts();
         // this.router.navigate(['/edit', this.currentPostid]);
         this.disableSave = true;
     };
     EditComponent.prototype.onDelete = function () {
-        console.log("INSIDE onDelete() of edit component");
         // post disappear from list pane
         this.blogService.deletePost(this.currentPostid);
         this.deletedPost = true;
@@ -599,7 +556,6 @@ var EditComponent = /** @class */ (function () {
         this.router.navigate(['preview', this.currentPostid]);
     };
     EditComponent.prototype.getPost = function () {
-        console.log("INSIDE getPost() of edit component");
         var currentPostid = +this.route.snapshot.paramMap.get('id');
     };
     EditComponent = __decorate([
@@ -668,10 +624,8 @@ var ListComponent = /** @class */ (function () {
         this.blogService = blogService;
         this.router = router;
         this.route = route;
-        console.log('INSIDE List component.. calling this.blogService.getPosts()');
         this.posts = this.blogService.getPosts();
         if (this.post) {
-            console.log("this.post in list component constructor");
             this.selected_post = this.post.postid;
         }
         else {
@@ -688,12 +642,10 @@ var ListComponent = /** @class */ (function () {
     // }
     ListComponent.prototype.newPost = function () {
         this.new_post = this.blogService.newPost();
-        console.log('INSIDE List component newPost: this.new_post = ', this.new_post, ' type of postid is', typeof this.new_post.postid);
         this.router.navigate(['edit', this.new_post.postid]);
     };
     ListComponent.prototype.onClickPost = function (post, postid) {
         this.post = post;
-        console.log("INSIDE List component onClickPost(): postid = ", postid, ' post', post, 'this.post is ', this.post);
         this.router.navigate(['edit', postid]);
     };
     __decorate([

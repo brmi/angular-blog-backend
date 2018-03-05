@@ -6,6 +6,7 @@ import * as jwt from 'jsonwebtoken';
 export class BlogService {
   private posts: Post[]= []; //memory cache of all blog posts
   private username: String = "";
+  private key = 'C-UFRaksvPKhx1txJYFcut3QGxsafPmwCY6SCly3G6c';
   constructor(private route: ActivatedRoute, private router: Router) {
     this.fetchPosts();
   }
@@ -17,7 +18,6 @@ export class BlogService {
       called inside the constructor so that all posts are retrieved 
       and be ready in memory when BlogService is created. 
     */
-    let key = 'C-UFRaksvPKhx1txJYFcut3QGxsafPmwCY6SCly3G6c';
     var cookie = document.cookie;
     cookie = cookie.substr(4); // get rid of jwt= ......
     console.log("cookie is", cookie);
@@ -59,13 +59,10 @@ export class BlogService {
         console.log("fetched posts: ", posts);
         }).catch(error => console.error("!!! Error: ", error));
     })(this.posts);
-
-    console.log("INSIDE fetchPosts()");
   }
 
   getPosts(): Post[] {
     /* DONE: This method simply returns posts */
-    console.log("INSIDE getPosts()");
     return this.posts;
   }
 
@@ -75,34 +72,11 @@ export class BlogService {
     /* DONE: Find the post with postid=id from posts and return it */
     // let retrievedPost: Post = JSON.parse(localStorage.getItem(id.toString()));
     
-    // var found = null;
-    // //return some variables
-
-    // for (var i = 0; i < (this.posts).length; i++){
-    //   var element = this.posts[i];
-
-    //   if (element.postid == id) {
-    //     found = element;
-    //     console.log("INSIDE getPost() in blogservice: numbers match. found element = ", found);
-    //   } else if ((element.postid).toString() == id.toString()){
-    //     console.log("INSIDE getPost() in blogservice: strings match");
-    //     found = element;
-    //     found.postid = id;
-    //   }
-
-    //   // console.log("get post:" + found);
-
-    //   // returns null if post is not found
-    //   return found;
-    // }
-
     let localPost = this.posts.find(x => x.postid === id) || null;
     if(!localPost){
       localPost = this.posts.find(x => x.postid.toString() === id.toString());
     }
-    console.log("INSIDE getPost()... fetching id", id, ' this.posts = ', this.posts, '\n FOUND: ', localPost);
     return localPost;
-    
   }
 
   newPost(): Post {
@@ -169,7 +143,7 @@ export class BlogService {
         .then(res => {
           res.json()
           console.log("response: " + res.status);
-          if(res.status == 400){
+          if(res.status != 201){
             console.log("deleted post");
             alert("Error creating post at the server");
             let removeIndex = posts.map(function(item) { return (item.postid).toString(); }).indexOf(postid.toString());
@@ -187,13 +161,6 @@ export class BlogService {
   }
 
   updatePost(post: Post): void {
-    console.log("INSIDE updatePost()");
-    /* DONE
-    From posts, find a post whose postid is the same as 
-    post.postid, update its title and body with the passed-in
-    values, change its modification time to now, and update
-    the post in localStorage. If no such post exists, do nothing.
-    */
     /*
     From posts, find a post whose postid is the same as post.postid,
     update its title and body with the passed-in values, 
@@ -233,12 +200,7 @@ export class BlogService {
        if (res.status != 200) {
          alert("Error: There was an error updating the post at the server!");
          // TODO: Reroute to edit
-        //  redirect: window.location.replace("../Sample/home.html") 
-        console.log("Did i rerwdwwoute?");
-        // this.router.navigateByUrl('/');
         router.navigate(['/edit', post.postid]);
-        // router.navigate(['/']);
-         console.log("Did i reroute?");
        }
        else {
          // update post in local array
@@ -259,12 +221,6 @@ export class BlogService {
   }
 
   deletePost(postid: number): void {
-    /* DONE
-    From posts, find a post whose postid is the same as
-    post.postid, delete it from posts, and delete a 
-    corresponding post from localStorage. If no such post
-    exists, do nothing.
-    */
    /*
     From posts, find a post whose postid is the same as the passed in value, 
     delete it from posts, and send a DELETE request to /api/:username/:postid 
@@ -274,8 +230,6 @@ export class BlogService {
     Otherwise, it should display an alert message saying that there was an error 
     deleting the post at the server, and navigate to /, the "list pane" of the editor.
    */
-
-    console.log("GONNA DELETE THIS POST: " + this.getPost(postid));
     if (! this.getPost(postid)) {
       return;
     }
@@ -303,6 +257,7 @@ export class BlogService {
         if (res.status != 204) {
           alert("Error: There was an error deleting the post at the server!");
           // TODO: Reroute to list?
+          router.navigate(['/']);
         }
       })
       .catch(error => console.error('Error:', error))
