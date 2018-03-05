@@ -39,8 +39,8 @@ export class EditComponent implements OnInit {
 
       this.route.params.subscribe(
         (params: Params) => {
-          this.post.postid = parseInt(params['id']);
-          this.currentPostid = parseInt(params['id']);
+          // this.post.postid = parseInt(params['id']);
+          // this.currentPostid = parseInt(params['id']);
           this.post = this.blogService.getPost(parseInt(params['id']));
         }
       );
