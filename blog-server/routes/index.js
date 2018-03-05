@@ -18,39 +18,53 @@ mongoConnection = db.connectDB( function( err ) {
 
 
   router.get('/blog/:username', function(req, res, next) {
-    console.log(req.params.username);
     var startID = parseInt(req.query.start) || 1;
-    console.log(startID);
-    var perPage = 5;
+    var perPage = 6;
     const db = dbConnection.db('BlogServer');
 
-    console.log("index:", db);
 
     //Load db & colletions
     const postsCollection = db.collection('Posts').find({ username: req.params.username }).skip(startID-1).limit(perPage);
-    var postsArray = postsCollection.toArray().then(function(result) {
+    const getLength = db.collection('Posts').find({ username: req.params.username }).skip(startID-1).count()
+    .then(function(numItems) {
+      console.log(numItems); // Use this to debug
+      // callback(numItems);
 
-      var reader = new commonmarkLibrary.Parser();
-      var writer = new commonmarkLibrary.HtmlRenderer();
-      
-      var count = 1;
-      
-      for(i=0; i< result.length; i++){
-        var parsedTitle = reader.parse(result[i].title);
-        result[i].title = writer.render(parsedTitle);
-        var parsedBody = reader.parse(result[i].body);
-        result[i].body = writer.render(parsedBody);
-        count += 1;
-      }
 
-      
-      if(result.length < 5){
-        count = 0;
-      }
-      res.render('blog', { username: req.params.username, posts: result, nextStartingID: count });
-    })
-    .catch(function(err){
-      console.log(err);
+      console.log("num posts: ", numItems);
+      var postsArray = postsCollection.toArray().then(function(result) {
+
+        var reader = new commonmarkLibrary.Parser();
+        var writer = new commonmarkLibrary.HtmlRenderer();
+        
+        var count = 0;
+        
+        for(i=0; i< result.length; i++){
+          var parsedTitle = reader.parse(result[i].title);
+          result[i].title = writer.render(parsedTitle);
+          var parsedBody = reader.parse(result[i].body);
+          result[i].body = writer.render(parsedBody);
+          count += 1;
+        }
+
+        if(result.length > 5){
+          console.log('more than 5...');
+          count = startID + 5;
+        // } else if (numItems%5 == 0){
+        //   count = numItems - 4;
+        // } else {
+        //   count = startID + 5;
+        } else {
+          count = 0;
+        }
+        console.log("next startingID: ", count);
+        length = Math.min(5, result.length);
+        res.render('blog', { username: req.params.username, posts: result, nextStartingID: count, length: length });
+      })
+      .catch(function(err){
+        console.log(err);
+      });
+
     });
 
   });
