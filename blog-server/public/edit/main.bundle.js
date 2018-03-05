@@ -326,7 +326,7 @@ var BlogService = /** @class */ (function () {
                 .then(function (res) {
                 res.json();
                 console.log("response: " + res.status);
-                if (res.status == 400) {
+                if (res.status != 201) {
                     console.log("deleted post");
                     alert("Error creating post at the server");
                     var removeIndex = posts.map(function (item) { return (item.postid).toString(); }).indexOf(postid.toString());
