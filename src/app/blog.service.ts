@@ -56,34 +56,37 @@ export class BlogService {
           let currentPost = json[i];
           posts.push(currentPost);
         }
+        console.log("fetched posts: ", posts);
         }).catch(error => console.error("!!! Error: ", error));
     })(this.posts);
 
-    console.log("fetched posts: ", this.posts);
-
-    console.log("In fetch posts");
+    console.log("INSIDE fetchPosts()");
   }
 
   getPosts(): Post[] {
     /* DONE: This method simply returns posts */
-    console.log("In get posts");
+    console.log("INSIDE getPosts()");
     return this.posts;
   }
 
   getPost(id: number): Post{
-    console.log("get post with id: ", id);
+  
     /* DONE: Find the post with postid=id from posts and return it */
     // let retrievedPost: Post = JSON.parse(localStorage.getItem(id.toString()));
-    console.log("IM IN GET POSTTTTTTT");
+    console.log("INSIDE getPost()... fetching id", id, ' this.posts = ', this.getPosts());
     var found = null;
     //return some variables
 
     for (var i = 0; i < (this.posts).length; i++){
       var element = this.posts[i];
-      console.log("element: ", element);
-
+      
       if (element.postid == id) {
         found = element;
+        console.log("INSIDE getPost() in blogservice: numbers match. found element = ", found);
+      } else if ((element.postid).toString() == id.toString()){
+        console.log("INSIDE getPost() in blogservice: strings match");
+        found = element;
+        found.postid = id;
       }
 
       // console.log("get post:" + found);
@@ -176,6 +179,7 @@ export class BlogService {
   }
 
   updatePost(post: Post): void {
+    console.log("INSIDE updatePost()");
     /* DONE
     From posts, find a post whose postid is the same as 
     post.postid, update its title and body with the passed-in

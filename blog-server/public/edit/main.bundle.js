@@ -255,28 +255,32 @@ var BlogService = /** @class */ (function () {
                     var currentPost = json[i];
                     posts.push(currentPost);
                 }
+                console.log("fetched posts: ", posts);
             }).catch(function (error) { return console.error("!!! Error: ", error); });
         })(this.posts);
-        console.log("fetched posts: ", this.posts);
-        console.log("In fetch posts");
+        console.log("INSIDE fetchPosts()");
     };
     BlogService.prototype.getPosts = function () {
         /* DONE: This method simply returns posts */
-        console.log("In get posts");
+        console.log("INSIDE getPosts()");
         return this.posts;
     };
     BlogService.prototype.getPost = function (id) {
-        console.log("get post with id: ", id);
         /* DONE: Find the post with postid=id from posts and return it */
         // let retrievedPost: Post = JSON.parse(localStorage.getItem(id.toString()));
-        console.log("IM IN GET POSTTTTTTT");
+        console.log("INSIDE getPost()... fetching id", id, ' this.posts = ', this.getPosts());
         var found = null;
         //return some variables
         for (var i = 0; i < (this.posts).length; i++) {
             var element = this.posts[i];
-            console.log("element: ", element);
             if (element.postid == id) {
                 found = element;
+                console.log("INSIDE getPost() in blogservice: numbers match. found element = ", found);
+            }
+            else if ((element.postid).toString() == id.toString()) {
+                console.log("INSIDE getPost() in blogservice: strings match");
+                found = element;
+                found.postid = id;
             }
             // console.log("get post:" + found);
             // returns null if post is not found
@@ -353,6 +357,7 @@ var BlogService = /** @class */ (function () {
         return newPost;
     };
     BlogService.prototype.updatePost = function (post) {
+        console.log("INSIDE updatePost()");
         /* DONE
         From posts, find a post whose postid is the same as
         post.postid, update its title and body with the passed-in
@@ -534,8 +539,10 @@ var EditComponent = /** @class */ (function () {
         this.disableSave = true;
         this.savedPost = false;
         this.deletedPost = false;
-        this.currentPostid = this.route.snapshot.params['id'];
+        this.currentPostid = parseInt(this.route.snapshot.params['id']);
+        console.log('inside edit componenet: currentPostID', this.currentPostid);
         this.post = this.blogService.getPost(this.currentPostid);
+        console.log('inside edit component: fetched post is: ', this.post);
         if (!this.post) {
             console.log("invalid postid");
             this.router.navigate(['/']);
@@ -549,10 +556,12 @@ var EditComponent = /** @class */ (function () {
         this.route.params.subscribe(function (params) {
             _this.post.postid = params['id'];
             _this.currentPostid = params['id'];
-            _this.post = _this.blogService.getPost(params['id']);
+            _this.post = _this.blogService.getPost(parseInt(params['id']));
         });
+        console.log("INSIDE ngOnInit() of edit component: this.posts = ", this.post);
     };
     EditComponent.prototype.tempSave = function () {
+        console.log("INSIDE tempSave() of edit component");
         this.blogService.updatePost(this.post);
         var tempPost = this.blogService.getPost(this.currentPostid);
         this.savedPost = true;
@@ -563,11 +572,13 @@ var EditComponent = /** @class */ (function () {
         var tempPost = this.blogService.getPost(this.currentPostid);
         this.post.modified = tempPost.modified;
         this.savedPost = true;
+        console.log("INSIDE onSave() in edit component");
         this.blogService.getPosts();
         // this.router.navigate(['/edit', this.currentPostid]);
         this.disableSave = true;
     };
     EditComponent.prototype.onDelete = function () {
+        console.log("INSIDE onDelete() of edit component");
         // post disappear from list pane
         this.blogService.deletePost(this.currentPostid);
         this.deletedPost = true;
@@ -584,7 +595,8 @@ var EditComponent = /** @class */ (function () {
         this.router.navigate(['preview', this.currentPostid]);
     };
     EditComponent.prototype.getPost = function () {
-        var currentPostid = +this.route.snapshot.paramMap.get('id');
+        console.log("INSIDE getPost() of edit component");
+        var currentPostid = +parseInt(this.route.snapshot.paramMap.get('id'));
     };
     EditComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
@@ -652,8 +664,10 @@ var ListComponent = /** @class */ (function () {
         this.blogService = blogService;
         this.router = router;
         this.route = route;
+        console.log('INSIDE List component.. calling this.blogService.getPosts()');
         this.posts = this.blogService.getPosts();
         if (this.post) {
+            console.log("this.post in list component constructor");
             this.selected_post = this.post.postid;
         }
     }
@@ -667,10 +681,11 @@ var ListComponent = /** @class */ (function () {
     // }
     ListComponent.prototype.newPost = function () {
         this.new_post = this.blogService.newPost();
+        console.log('INSIDE List component newPost: this.new_post = ', this.new_post);
         this.router.navigate(['edit', this.new_post.postid]);
     };
     ListComponent.prototype.onClickPost = function (post, postid) {
-        console.log("clicked onClickPost", postid);
+        console.log("INSIDE List component onClickPost(): postid = ", postid);
         this.router.navigate(['/edit', postid]);
     };
     __decorate([

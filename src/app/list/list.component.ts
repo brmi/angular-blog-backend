@@ -17,8 +17,10 @@ export class ListComponent implements OnInit {
 
   constructor(private blogService: BlogService, private router: Router, 
     private route: ActivatedRoute) {
+      console.log('INSIDE List component.. calling this.blogService.getPosts()');
       this.posts = this.blogService.getPosts();
       if (this.post){
+        console.log("this.post in list component constructor");
         this.selected_post = this.post.postid;
       }
   }
@@ -38,11 +40,12 @@ export class ListComponent implements OnInit {
 
   newPost() {
     this.new_post = this.blogService.newPost();
+    console.log('INSIDE List component newPost: this.new_post = ', this.new_post);
     this.router.navigate(['edit', this.new_post.postid]);
   }
 
   onClickPost(post: Post, postid: number) {
-    console.log("clicked onClickPost", postid);
+    console.log("INSIDE List component onClickPost(): postid = ", postid);
     this.router.navigate(['/edit', postid]);
   }
 }

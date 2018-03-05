@@ -20,8 +20,11 @@ export class EditComponent implements OnInit {
 
   constructor(private blogService: BlogService,
     private route: ActivatedRoute, private router: Router) {
-    this.currentPostid= this.route.snapshot.params['id'];
+    this.currentPostid= parseInt(this.route.snapshot.params['id']);
+    console.log('inside edit componenet: currentPostID', this.currentPostid);
     this.post = this.blogService.getPost(this.currentPostid);
+
+    console.log('inside edit component: fetched post is: ', this.post);
     
     if(!this.post){
       console.log("invalid postid");
@@ -38,13 +41,15 @@ export class EditComponent implements OnInit {
         (params: Params) => {
           this.post.postid = params['id'];
           this.currentPostid = params['id'];
-          this.post = this.blogService.getPost(params['id']);
+          this.post = this.blogService.getPost(parseInt(params['id']));
         }
       );
+      console.log("INSIDE ngOnInit() of edit component: this.posts = ", this.post);
 
   }
 
   tempSave() {
+    console.log("INSIDE tempSave() of edit component");
     this.blogService.updatePost(this.post);
     let tempPost: Post =  this.blogService.getPost(this.currentPostid);
     this.savedPost = true;
@@ -56,12 +61,14 @@ export class EditComponent implements OnInit {
     let tempPost: Post =  this.blogService.getPost(this.currentPostid);
     this.post.modified = tempPost.modified;
     this.savedPost = true;
+    console.log("INSIDE onSave() in edit component");
     this.blogService.getPosts();
     // this.router.navigate(['/edit', this.currentPostid]);
     this.disableSave = true;
   }
 
   onDelete() {
+    console.log("INSIDE onDelete() of edit component")
     // post disappear from list pane
     this.blogService.deletePost(this.currentPostid);
     this.deletedPost = true;
@@ -84,7 +91,8 @@ export class EditComponent implements OnInit {
   }
 
   getPost(): void {
-    const currentPostid = +this.route.snapshot.paramMap.get('id');
+    console.log("INSIDE getPost() of edit component")
+    const currentPostid =+ parseInt(this.route.snapshot.paramMap.get('id'));
   }
 
 }
