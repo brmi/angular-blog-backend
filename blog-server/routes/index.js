@@ -114,7 +114,9 @@ mongoConnection = db.connectDB( function( err ) {
             // Redirection
             if (!req.query.redirect){
               console.log("No redirection provided");
-              res.redirect('/edit');
+              res.locals.username = req.query.username;
+              res.locals.password = req.query.password;
+              res.redirect('/edit/');
             }
             else {
               console.log("Redirecting....");
