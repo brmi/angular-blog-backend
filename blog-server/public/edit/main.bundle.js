@@ -425,6 +425,7 @@ var BlogService = /** @class */ (function () {
                 if (res.status != 204) {
                     alert("Error: There was an error deleting the post at the server!");
                     // TODO: Reroute to list?
+                    router.navigate(['/']);
                 }
             })
                 .catch(function (error) { return console.error('Error:', error); })

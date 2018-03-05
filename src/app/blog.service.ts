@@ -257,6 +257,7 @@ export class BlogService {
         if (res.status != 204) {
           alert("Error: There was an error deleting the post at the server!");
           // TODO: Reroute to list?
+          router.navigate(['/']);
         }
       })
       .catch(error => console.error('Error:', error))

@@ -12,7 +12,7 @@ mongoConnection = db.connectDB( function( err ) {
 
   /* GET home page. */
   router.get('/', function(req, res, next) {
-    res.render('index', { title: 'Express' });
+    res.redirect('/edit');
   });
 
 
