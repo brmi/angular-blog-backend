@@ -70,6 +70,7 @@ export class BlogService {
   }
 
   getPost(id: number): Post{
+
   
     /* DONE: Find the post with postid=id from posts and return it */
     // let retrievedPost: Post = JSON.parse(localStorage.getItem(id.toString()));

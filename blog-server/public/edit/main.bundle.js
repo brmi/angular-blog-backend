@@ -543,10 +543,10 @@ var EditComponent = /** @class */ (function () {
         this.disableSave = true;
         this.savedPost = false;
         this.deletedPost = false;
-        this.currentPostid = this.route.snapshot.params['id'];
-        console.log('inside edit componenet: currentPostID', this.currentPostid);
+        this.currentPostid = parseInt(this.route.snapshot.params['id']);
+        console.log('inside edit componenet: currentPostID', this.currentPostid, ' type of postid is', typeof this.currentPostid);
         this.post = this.blogService.getPost(this.currentPostid);
-        console.log('inside edit component: fetched post is: ', this.post);
+        console.log('inside edit component: fetched post is: ', this.post, ' type of postid is', typeof this.post.postid);
         if (!this.post) {
             console.log("invalid postid");
             this.router.navigate(['/']);
@@ -562,7 +562,7 @@ var EditComponent = /** @class */ (function () {
             // this.currentPostid = parseInt(params['id']);
             _this.post = _this.blogService.getPost(parseInt(params['id']));
         });
-        console.log("INSIDE ngOnInit() of edit component: this.post = ", this.post);
+        console.log("INSIDE ngOnInit() of edit component: this.post = ", this.post, ' type of postid is', typeof this.post.postid);
     };
     EditComponent.prototype.tempSave = function () {
         console.log("INSIDE tempSave() of edit component");
@@ -674,6 +674,9 @@ var ListComponent = /** @class */ (function () {
             console.log("this.post in list component constructor");
             this.selected_post = this.post.postid;
         }
+        else {
+            console.log("this.post was not updated. It is: ", this.post);
+        }
     }
     ListComponent.prototype.ngOnInit = function () {
     };
@@ -685,12 +688,13 @@ var ListComponent = /** @class */ (function () {
     // }
     ListComponent.prototype.newPost = function () {
         this.new_post = this.blogService.newPost();
-        console.log('INSIDE List component newPost: this.new_post = ', this.new_post);
+        console.log('INSIDE List component newPost: this.new_post = ', this.new_post, ' type of postid is', typeof this.new_post.postid);
         this.router.navigate(['edit', this.new_post.postid]);
     };
     ListComponent.prototype.onClickPost = function (post, postid) {
-        console.log("INSIDE List component onClickPost(): postid = ", postid);
-        this.router.navigate(['/edit', postid]);
+        this.post = post;
+        console.log("INSIDE List component onClickPost(): postid = ", postid, ' post', post, 'this.post is ', this.post);
+        this.router.navigate(['edit', postid]);
     };
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */])(),
