@@ -285,6 +285,9 @@ var BlogService = /** @class */ (function () {
         //   return found;
         // }
         var localPost = this.posts.find(function (x) { return x.postid === id; }) || null;
+        if (!localPost) {
+            localPost = this.posts.find(function (x) { return x.postid.toString() === id.toString(); });
+        }
         console.log("INSIDE getPost()... fetching id", id, ' this.posts = ', this.posts, '\n FOUND: ', localPost);
         return localPost;
     };
