@@ -77,6 +77,7 @@ mongoConnection = db.connectDB( function( err ) {
     //Load db & colletions
     const postsCollection = db.collection('Posts').find({ postid: parseInt(req.params.postid), username: req.params.username });
     var postsArray = postsCollection.toArray().then(function(result) {
+      console.log("result in /username/postid", result);
       var reader = new commonmarkLibrary.Parser();
       var writer = new commonmarkLibrary.HtmlRenderer();
       
@@ -85,7 +86,7 @@ mongoConnection = db.connectDB( function( err ) {
       var parsedBody = reader.parse(result[0].body);
       result[0].body = writer.render(parsedBody);
 
-      res.render('blog', { username: req.params.username, posts: result, nextStartingID: 0 });
+      res.render('blog', { username: req.params.username, posts: result, nextStartingID: 0, length: 1 });
     })
     .catch(function(err){
       console.log(err);
