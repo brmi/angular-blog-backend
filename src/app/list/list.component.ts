@@ -50,6 +50,6 @@ export class ListComponent implements OnInit {
   onClickPost(post: Post, postid: number) {
     this.post = post;
     console.log("INSIDE List component onClickPost(): postid = ", postid, ' post', post, 'this.post is ', this.post);
-    this.router.navigate(['../edit', {queryParams: postid, relativeTo: this.route}]);
+    this.router.navigate(['edit', postid]);
   }
 }
