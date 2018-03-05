@@ -48,7 +48,7 @@ mongoConnection = db.connectDB( function( err ) {
     var cookie = req.cookies['jwt'];
     jwt.verify(req.cookies['jwt'], key, function(err, decoded) {
      if (err){
-       res.redirect('/login?redirect=edit');
+       res.redirect('/login?redirect=/edit/');
      }
      else {
        res.locals.username = decoded.usr;
