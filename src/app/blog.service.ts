@@ -6,6 +6,7 @@ import * as jwt from 'jsonwebtoken';
 export class BlogService {
   private posts: Post[]= []; //memory cache of all blog posts
   private username: String = "";
+  private key = 'C-UFRaksvPKhx1txJYFcut3QGxsafPmwCY6SCly3G6c';
   constructor(private route: ActivatedRoute, private router: Router) {
     this.fetchPosts();
   }
@@ -17,7 +18,6 @@ export class BlogService {
       called inside the constructor so that all posts are retrieved 
       and be ready in memory when BlogService is created. 
     */
-    let key = 'C-UFRaksvPKhx1txJYFcut3QGxsafPmwCY6SCly3G6c';
     var cookie = document.cookie;
     cookie = cookie.substr(4); // get rid of jwt= ......
     console.log("cookie is", cookie);
