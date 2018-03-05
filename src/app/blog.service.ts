@@ -198,7 +198,7 @@ export class BlogService {
    const FETCH_URL = 'http://localhost:3000/api/'+ this.username +'/' + post.postid;
    var myOptions = {
      method: 'PUT',
-    //  credentials: 'same-origin',
+     credentials: 'same-origin',
      body: JSON.stringify({"title": post.title, "body": post.body}),
      dataType: 'json',
      headers: {
@@ -209,7 +209,14 @@ export class BlogService {
 
    (function (router, posts) {
     fetch(FETCH_URL, 
-      myOptions)
+      {
+        method: 'PUT',
+        credentials: 'same-origin',
+        body: JSON.stringify({"title": post.title, "body": post.body}),
+        headers: {
+          // 'Authorization': 'Bearer ' + accessToken,
+          'Content-Type': 'application/json' 
+        }})
      .then(function(res) {
        if (res.status != 200) {
          alert("Error: There was an error updating the post at the server!");

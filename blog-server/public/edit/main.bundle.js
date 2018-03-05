@@ -312,7 +312,7 @@ var BlogService = /** @class */ (function () {
         // Add to posts
         console.log("push post: ", this.posts.push(newPost));
         console.log("Just created new post: ", newPost, " current id is now:  ", maxID + 1);
-        var FETCH_URL = 'http://lvh.me:3000/api/' + this.username + '/' + newPost.postid;
+        var FETCH_URL = 'http://localhost:3000/api/' + this.username + '/' + newPost.postid;
         var myOptions = {
             method: 'POST',
             credentials: 'same-origin',
@@ -372,10 +372,10 @@ var BlogService = /** @class */ (function () {
         was an error updating the post at the server,
         and navigate to the "edit view" of the post.
         */
-        var FETCH_URL = 'http://lvh.me:3000/api/' + this.username + '/' + post.postid;
+        var FETCH_URL = 'http://localhost:3000/api/' + this.username + '/' + post.postid;
         var myOptions = {
             method: 'PUT',
-            //  credentials: 'same-origin',
+            credentials: 'same-origin',
             body: JSON.stringify({ "title": post.title, "body": post.body }),
             dataType: 'json',
             headers: {
@@ -384,7 +384,15 @@ var BlogService = /** @class */ (function () {
             }
         };
         (function (router, posts) {
-            fetch(FETCH_URL, myOptions)
+            fetch(FETCH_URL, {
+                method: 'PUT',
+                credentials: 'same-origin',
+                body: JSON.stringify({ "title": post.title, "body": post.body }),
+                headers: {
+                    // 'Authorization': 'Bearer ' + accessToken,
+                    'Content-Type': 'application/json'
+                }
+            })
                 .then(function (res) {
                 if (res.status != 200) {
                     alert("Error: There was an error updating the post at the server!");
@@ -430,7 +438,7 @@ var BlogService = /** @class */ (function () {
         if (!this.getPost(postid)) {
             return;
         }
-        var FETCH_URL = 'http://lvh.me:3000/api/' + this.username + '/' + postid;
+        var FETCH_URL = 'http://localhost:3000/api/' + this.username + '/' + postid;
         var myOptions = {
             method: 'DELETE',
             credentials: 'same-origin',
