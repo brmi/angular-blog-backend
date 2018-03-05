@@ -20,11 +20,11 @@ export class EditComponent implements OnInit {
 
   constructor(private blogService: BlogService,
     private route: ActivatedRoute, private router: Router) {
-    this.currentPostid= this.route.snapshot.params['id'];
-    console.log('inside edit componenet: currentPostID', this.currentPostid);
+    this.currentPostid= parseInt(this.route.snapshot.params['id']);
+    console.log('inside edit componenet: currentPostID', this.currentPostid, ' type of postid is', typeof this.currentPostid);
     this.post = this.blogService.getPost(this.currentPostid);
 
-    console.log('inside edit component: fetched post is: ', this.post);
+    console.log('inside edit component: fetched post is: ', this.post, ' type of postid is', typeof this.post.postid);
     
     if(!this.post){
       console.log("invalid postid");
@@ -44,7 +44,7 @@ export class EditComponent implements OnInit {
           this.post = this.blogService.getPost(parseInt(params['id']));
         }
       );
-      console.log("INSIDE ngOnInit() of edit component: this.post = ", this.post);
+      console.log("INSIDE ngOnInit() of edit component: this.post = ", this.post, ' type of postid is', typeof this.post.postid);
 
   }
 
